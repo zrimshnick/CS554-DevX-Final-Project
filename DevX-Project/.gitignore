@@ -9,6 +9,7 @@ lerna-debug.log*
 
 
 DevX-Project/package-lock.json
+package-lock.json
 node_modules
 dist
 dist-ssr
