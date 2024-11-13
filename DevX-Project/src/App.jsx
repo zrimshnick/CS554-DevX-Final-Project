@@ -39,7 +39,7 @@ function App() {
       <div className="App-content-container">
         <Routes>
           <Route path="/" element={<Home />}></Route>
-          <Route path="/profile" element={<Profile />}></Route>
+          <Route path="/profile/:id" element={<Profile />}></Route>
           <Route path="/chats" element={<Chats />}></Route>
           <Route path="/explore" element={<Explore />}></Route>
         </Routes>

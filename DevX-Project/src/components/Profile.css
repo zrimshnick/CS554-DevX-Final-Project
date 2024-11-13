@@ -1,0 +1,41 @@
+.Profile {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+}
+.Profile-left-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .Profile-left-photo {
+    height: 10rem;
+  }
+  .Profile-left-button {
+    background-color: #543310;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #f8f4e1;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.5rem;
+    transition: 0.05s ease-in-out;
+    &:hover {
+      cursor: pointer;
+      background-color: #af8f6f;
+    }
+  }
+}
+.Profile-right-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .Profile-right-username {
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+  .Profile-right-bio {
+    font-size: 0.9em;
+  }
+}
