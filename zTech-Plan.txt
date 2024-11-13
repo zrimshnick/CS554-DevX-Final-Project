@@ -1,0 +1,25 @@
+Function and general overview:
+	Our application will be a social app where people can make friends. More specifically, coffee lovers can meet other like-minded people to grab coffee with and talk in their area. Users will have accounts with public profiles where they can swipe on potential coffee dates. When there is a match, users will be prompted with recommended cafes in their general location with information like reviews, photos, etc. There will be a chat feature between users who match so they can figure out a date, time, and anything else they need to plan their coffee date. 
+
+    There is a big demand for applications that facilitate friendships, especially when people move to new areas or enter new eras of their lives such as post-grad. Similar applications exist such as Bumble BFF, but our application is unique in the sense that it recommends specific cafes for these friendships to begin at. Many organizations use coffee dates as a means to get to know new members and find it to be successful - we believe the same can apply to starting new friendships!
+
+--------------------------------------------------------------------------------
+Course technologies:
+Redis
+- We will use this to cache our data so common queries will have faster access times such as getting user data
+
+React 
+- Create dynamic user interfaces for our user explore page, swiping mechanism, user chat rooms, etc.
+
+Firebase Auth (user authentication)
+- Create a secure authentication system for user login/auth
+
+--------------------------------------------------------------------------------
+Independent technologies:
+Vercel
+- Free hosting using built-in integration for Github
+- Will use to host our application
+
+AWS S3 bucket (image storage)
+- Store data on AWS cloud
+- We’ll use AWS S3 Buckets to store our database’s images
