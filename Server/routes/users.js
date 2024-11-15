@@ -23,6 +23,7 @@ router
       userCreateData.username = validation.checkUsername(
         userCreateData.username
       );
+      userCreateData.email = validation.checkEmail(userCreateData.email);
       userCreateData.age = validation.checkAge(userCreateData.age);
       userCreateData.bio = validation.checkBio(userCreateData.bio);
     } catch (e) {
@@ -35,6 +36,7 @@ router
         firstName,
         lastName,
         username,
+        email,
         age,
         bio
       );

@@ -1,0 +1,136 @@
+.Auth {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../img/coffeeDate1.jpg");
+  background-size: cover; /* Scale the image to cover the div */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat;
+}
+
+.Auth-intro-container {
+  width: 40vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #f8f4e1;
+  box-shadow: 0 4px 8px #54331028;
+  border-radius: 2rem;
+  padding: 2rem 4rem;
+}
+
+.Auth-catchphrase {
+  font-family: "Pacifico", cursive;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 3.5em;
+  color: #3b240b;
+  margin: 0;
+  line-height: 4.5rem;
+}
+
+.Auth-buttons-header {
+  color: #3b240b;
+  font-size: 1.1em;
+  font-weight: bold;
+  padding-bottom: 1rem;
+}
+
+.Auth-buttons-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+.Auth-button {
+  width: 8rem;
+  background-color: #3b240b;
+  color: white;
+  font-weight: bold;
+  font-size: 1em;
+  padding: 0.5rem 1.5rem;
+  border-radius: 1rem;
+  border: none;
+  transition: 0.1s ease-in-out;
+  &:hover {
+    background-color: #af8f6f;
+    cursor: pointer;
+  }
+}
+
+/* AUTH FORMS */
+.Auth-form-container {
+  width: 25vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #f8f4e1;
+  box-shadow: 0 4px 8px #54331028;
+  border-radius: 2rem;
+  padding: 2rem 4rem;
+}
+.Auth-form-header {
+  margin-top: 0;
+}
+.Auth-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+.Auth-input {
+  width: 15rem;
+  height: 1.5rem;
+  background-color: white;
+  border: 1px #af8f6f solid;
+  border-radius: 1rem;
+  padding: 0.5rem 0.5rem;
+  transition: 0.1s ease-in-out;
+  &:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: #3b240b;
+  }
+}
+.Auth-back-button {
+  background-color: transparent;
+  color: #3b240b;
+  border: none;
+  transition: 0.1s ease-in-out;
+  &:hover {
+    cursor: pointer;
+    color: #af8f6f;
+  }
+}
+
+.Auth-form-error {
+  color: red;
+}
+.Auth-social-container {
+  border-top: 1px #af8f6f solid;
+  border-bottom: 1px #af8f6f solid;
+  width: 15rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+}
+.Auth-social-header {
+  font-size: 0.95em;
+  font-weight: bold;
+  color: #3b240b;
+}
+.Auth-social-img {
+  height: 3rem;
+  margin-top: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
+}

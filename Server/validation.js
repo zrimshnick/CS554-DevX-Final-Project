@@ -28,6 +28,22 @@ export const checkUsername = (username) => {
   return username;
 };
 
+export const checkEmail = (email) => {
+  if (email === undefined) throw "Error: All fields need to be supplied";
+  if (typeof email !== "string") throw "Error: email must be a string";
+  email = email.trim();
+
+  if (email.length === 0) throw "Error: email cannot be empty";
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$/;
+
+  if (!emailPattern.test(email)) {
+    throw `Error: email is not a valid email.`;
+  }
+
+  return email;
+};
+
 export const checkAge = (age) => {
   if (age === undefined) throw "Error: All fields need to be supplied";
   if (typeof age !== "number") throw "Error: age must be a number";

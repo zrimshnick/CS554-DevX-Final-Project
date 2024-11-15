@@ -4,6 +4,7 @@ off-white: #F8F4E1
 light-brown: #AF8F6F
 medium-brown: #74512D
 dark-brown: #543310
+darkest-brown: #3b240b
 */
 
 :root {
@@ -22,4 +23,9 @@ dark-brown: #543310
 
 a {
   text-decoration: none;
+}
+
+input,
+button {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }

@@ -17,6 +17,7 @@ try {
       "Zack",
       "Rimshnick",
       "zrimmy",
+      "zrimshnick@gmail.com",
       21,
       "biobiobioboibobi"
     )
@@ -26,21 +27,42 @@ try {
 }
 try {
   console.log(
-    await usersData.createUser("LeBron", "James", "kingjames", 40, "")
+    await usersData.createUser(
+      "LeBron",
+      "James",
+      "kingjames",
+      "l.james6@gmail.com",
+      40,
+      ""
+    )
   );
 } catch (e) {
   console.log(e);
 }
 try {
   console.log(
-    await usersData.createUser("Aaron", "Rodgers", "arod12", 40, "nyj")
+    await usersData.createUser(
+      "Aaron",
+      "Rodgers",
+      "arod12",
+      "aaron.r12@gmail.com",
+      40,
+      "nyj"
+    )
   );
 } catch (e) {
   console.log(e);
 }
 try {
   console.log(
-    await usersData.createUser("Aaron", "Judge", "thejudge", 30, "#99")
+    await usersData.createUser(
+      "Aaron",
+      "Judge",
+      "thejudge",
+      "aaron.judge@yahoo.com",
+      30,
+      "#99"
+    )
   );
 } catch (e) {
   console.log(e);

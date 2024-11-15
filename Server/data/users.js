@@ -2,11 +2,19 @@ import { users } from "../config/mongoCollections.js";
 import * as validation from "../validation.js";
 import { ObjectId } from "mongodb";
 
-export const createUser = async (firstName, lastName, username, age, bio) => {
+export const createUser = async (
+  firstName,
+  lastName,
+  username,
+  email,
+  age,
+  bio
+) => {
   /* INPUT VALIDATION */
   firstName = validation.checkName(firstName);
   lastName = validation.checkName(lastName);
   username = validation.checkUsername(username);
+  email = validation.checkEmail(email);
   age = validation.checkAge(age);
   bio = validation.checkBio(bio);
 
@@ -15,6 +23,7 @@ export const createUser = async (firstName, lastName, username, age, bio) => {
     firstName: firstName,
     lastName: lastName,
     username: username,
+    email: email,
     age: age,
     bio: bio,
   };
@@ -22,8 +31,10 @@ export const createUser = async (firstName, lastName, username, age, bio) => {
   const usersCollection = await users();
   /* check if username is taken */
   const usernameFound = await usersCollection.findOne({ username: username });
-
   if (usernameFound) throw "Error: username already taken";
+
+  const emailFound = await usersCollection.findOne({ email: email });
+  if (emailFound) throw "Error: email already associated with an account";
 
   const insertContent = await usersCollection.insertOne(newUserContent);
   if (!insertContent.acknowledged || !insertContent.insertedId)
