@@ -26,7 +26,7 @@ async function doChangePassword(email, oldPassword, newPassword) {
   await doSignOut();
 }
 
-async function doSignInUserWithEmailAndPassword(email, password) {
+async function doSignInWithEmailAndPassword(email, password) {
   const auth = getAuth();
   await signInWithEmailAndPassword(auth, email, password);
 }
@@ -53,5 +53,5 @@ export {
   doSignOut,
   doSocialSignIn,
   doCreateUserWithEmailAndPassword,
-  doSignInUserWithEmailAndPassword,
+  doSignInWithEmailAndPassword,
 };

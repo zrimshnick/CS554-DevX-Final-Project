@@ -99,7 +99,8 @@
     border-color: #3b240b;
   }
 }
-.Auth-back-button {
+.Auth-back-button,
+.Auth-forgotPassword-button {
   background-color: transparent;
   color: #3b240b;
   border: none;

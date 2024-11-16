@@ -5,6 +5,7 @@ import { Route, Link, Routes, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import profileIcon from "../img/default-profileIcon.png";
 import SignOutButton from "./SignOut";
+import ChangePassword from "./ChangePassword";
 
 function Profile(props) {
   /* const [loading, setLoading] = useState(true);
@@ -62,6 +63,7 @@ function Profile(props) {
     <div className="Profile">
       <div>Profile Page</div>
       <SignOutButton />
+      <ChangePassword />
     </div>
   );
 }

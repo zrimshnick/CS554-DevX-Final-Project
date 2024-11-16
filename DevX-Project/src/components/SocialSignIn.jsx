@@ -14,7 +14,7 @@ const SocialSignIn = () => {
 
   return (
     <div className="Auth-social-container">
-      <div className="Auth-social-header">Or sign up with Google</div>
+      <div className="Auth-social-header">Or sign in using Google</div>
       <img
         className="Auth-social-img"
         onClick={socialSignOn}
