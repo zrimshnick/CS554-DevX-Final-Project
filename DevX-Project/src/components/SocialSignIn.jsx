@@ -1,7 +1,7 @@
 import { doSocialSignIn } from "../firebase/FirebaseFunctions";
-/* import googleIcon from "../../public/img/googleIcon.png"; */
 import googleIcon from "../img/googleIcon.png";
 import "./Auth.css";
+import "./SocialSignIn.css";
 
 const SocialSignIn = () => {
   const socialSignOn = async () => {

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import logoIcon from "../img/logo.png";
 import "./Auth.css";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
@@ -79,14 +80,20 @@ function Auth() {
           it easy to find like-minded coffee lovers!
         </p>
         <div className="Auth-buttons-header">
-          Sign up or sign in to continue
+          Sign in or create an account to continue
         </div>
         <div className="Auth-buttons-container">
           <Link className="Auth-button" to="/signin">
             Sign In
           </Link>
+          {/* <div>.</div> */}
+          <img
+            className="App-auth-logo"
+            src={logoIcon}
+            alt="Coffee Connections Logo"
+          />
           <Link className="Auth-button" to="/signup">
-            Sign Up
+            Create Account
           </Link>
         </div>
       </div>

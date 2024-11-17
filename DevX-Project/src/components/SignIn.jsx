@@ -58,6 +58,7 @@ function SignIn() {
             placeholder="Password"
             className="Auth-input"
           />
+
           <button type="submit" className="Auth-button">
             Sign In
           </button>
@@ -66,7 +67,7 @@ function SignIn() {
             className="Auth-forgotPassword-button"
             onClick={passwordReset}
           >
-            Forgot Password
+            Forgot Password?
           </button>
         </form>
         <SocialSignIn />
