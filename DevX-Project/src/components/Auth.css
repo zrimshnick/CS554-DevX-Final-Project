@@ -56,6 +56,7 @@
   padding: 0.5rem 1.5rem;
   border-radius: 1rem;
   border: none;
+  margin-top: 0.5rem;
   transition: 0.1s ease-in-out;
   &:hover {
     background-color: #af8f6f;
@@ -68,7 +69,7 @@
 
 /* AUTH FORMS */
 .Auth-form-container {
-  width: 25vw;
+  max-width: 20rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -146,6 +147,16 @@
 }
 
 .Auth-form-error {
+  width: 90%;
   color: red;
   font-size: 0.8em;
+  /* text-align: left; */
+}
+
+.Auth-form-break {
+  border-top: 1px #af8f6f solid;
+  height: 0;
+  width: 15rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0.4rem;
 }

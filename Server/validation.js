@@ -19,8 +19,8 @@ export const checkUsername = (username) => {
   if (username.length === 0) throw "Error: username cannot be empty";
   if (username.length < 5)
     throw "Error: username must have at least 5 characters";
-  if (username.length > 12)
-    throw "Error: username must have at most 12 characters";
+  if (username.length > 19)
+    throw "Error: username must have at most 19 characters";
 
   if (!/^[a-zA-Z0-9]*$/.test(username))
     throw "Error: username can only have English letters or numbers";

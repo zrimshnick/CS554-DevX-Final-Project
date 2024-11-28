@@ -2,6 +2,7 @@ import { Router } from "express";
 const router = Router();
 import { usersData } from "../data/index.js";
 import { ObjectId } from "mongodb";
+import { generateUsername } from "unique-username-generator";
 import * as validation from "../validation.js";
 
 router
@@ -16,13 +17,12 @@ router
       return res.status(400).json({ error: "Request body must have fields" });
     }
 
+    const username = generateUsername("", 2, 19);
     /* INPUT VALIDATION */
     try {
       userCreateData.firstName = validation.checkName(userCreateData.firstName);
       userCreateData.lastName = validation.checkName(userCreateData.lastName);
-      userCreateData.username = validation.checkUsername(
-        userCreateData.username
-      );
+      /* username = validation.checkUsername(username); */
       userCreateData.email = validation.checkEmail(userCreateData.email);
       userCreateData.age = validation.checkAge(userCreateData.age);
       userCreateData.bio = validation.checkBio(userCreateData.bio);
@@ -31,7 +31,7 @@ router
     }
 
     try {
-      const { firstName, lastName, username, age, bio } = userCreateData;
+      const { firstName, lastName, email, age, bio } = userCreateData;
       const userCreated = await usersData.createUser(
         firstName,
         lastName,

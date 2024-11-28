@@ -11,11 +11,12 @@ import {
   EmailAuthProvider,
   reauthenticateWithCredential,
 } from "firebase/auth";
+import { generateUsername } from "unique-username-generator";
 
-async function doCreateUserWithEmailAndPassword(email, password, displayName) {
+async function doCreateUserWithEmailAndPassword(email, password) {
   const auth = getAuth();
   await createUserWithEmailAndPassword(auth, email, password);
-  await updateProfile(auth.currentUser, { displayName: displayName });
+  //await updateProfile(auth.currentUser, { displayName: displayName });
 }
 
 async function doChangePassword(email, oldPassword, newPassword) {
@@ -34,7 +35,49 @@ async function doSignInWithEmailAndPassword(email, password) {
 async function doSocialSignIn() {
   const auth = getAuth();
   let socialProvider = new GoogleAuthProvider();
-  await signInWithPopup(auth, socialProvider);
+  /* await signInWithPopup(auth, socialProvider); */
+
+  try {
+    // Sign in with Firebase
+    const result = await signInWithPopup(auth, socialProvider);
+    const user = result.user;
+
+    // Extract user information from Firebase response
+    const userData = {
+      firstName: user.displayName.split(" ")[0] || "First",
+      lastName: user.displayName.split(" ")[1] || "Last",
+      username: generateUsername("", 2, 19),
+      email: user.email,
+      age: 0, // Default age, or add age input in your app later
+      bio: "", // Default bio
+    };
+
+    // Create MongoDB user
+    try {
+      const response = await fetch("http://localhost:3000/user/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        console.error("Error creating user in MongoDB:", error);
+        alert("Error saving user data. Please try again.");
+      } else {
+        console.log(
+          "User successfully created in MongoDB:",
+          await response.json()
+        );
+      }
+    } catch (mongoError) {
+      console.error("Error connecting to MongoDB API:", mongoError);
+      alert("Could not connect to the server. Please try again later.");
+    }
+  } catch (firebaseError) {
+    console.error("Error signing in with Google:", firebaseError);
+    alert("Google Sign-In failed. Please try again.");
+  }
 }
 
 async function doPasswordReset(email) {
