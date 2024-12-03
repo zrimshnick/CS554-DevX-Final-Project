@@ -11,7 +11,7 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
-import Chats from "./components/Chats";
+import Chatroom from "./components/Chatroom";
 import Explore from "./components/Explore";
 
 function App() {
@@ -104,7 +104,7 @@ function App() {
             </Route>
 
             <Route path="/chats" element={<PrivateRoute />}>
-              <Route path="/chats" element={<Chats />}></Route>
+              <Route path="/chats" element={<Chatroom />}></Route>
             </Route>
 
             <Route path="/explore" element={<PrivateRoute />}>

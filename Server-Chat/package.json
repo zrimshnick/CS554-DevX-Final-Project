@@ -1,0 +1,17 @@
+{
+  "name": "server-chat",
+  "version": "1.0.0",
+  "description": "Server for chat room",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "socket.io": "^4.8.1"
+  }
+}
