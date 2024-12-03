@@ -10,14 +10,26 @@ import {
 
 function SignIn() {
   const { currentUser } = useContext(AuthContext);
+  const [signInCheck, setSignInCheck] = useState("");
+
+  const handleSignInChange = (e) => {
+    setSignInCheck("");
+  };
+
   const handleLogIn = async (e) => {
     e.preventDefault();
     let { email, password } = e.target.elements;
+    let errors = {};
+
+    setSignInCheck("");
 
     try {
       await doSignInWithEmailAndPassword(email.value, password.value);
     } catch (e) {
-      alert(e);
+      errors.signin = "Incorrect email or password";
+      setSignInCheck(errors.signin);
+      return false;
+      //alert(e);
     }
   };
 
@@ -49,6 +61,7 @@ function SignIn() {
             required
             autoFocus={true}
             className="Auth-input"
+            onChange={handleSignInChange}
           />
           <input
             type="password"
@@ -57,7 +70,9 @@ function SignIn() {
             required
             placeholder="Password"
             className="Auth-input"
+            onChange={handleSignInChange}
           />
+          {signInCheck && <div className="Auth-form-error">{signInCheck}</div>}
 
           <button type="submit" className="Auth-button">
             Sign In

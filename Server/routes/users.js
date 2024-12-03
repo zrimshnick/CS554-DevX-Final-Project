@@ -20,25 +20,31 @@ router
     const username = generateUsername("", 2, 19);
     /* INPUT VALIDATION */
     try {
-      userCreateData.firstName = validation.checkName(userCreateData.firstName);
-      userCreateData.lastName = validation.checkName(userCreateData.lastName);
+      /* userCreateData.firstName = validation.checkName(userCreateData.firstName);
+      userCreateData.lastName = validation.checkName(userCreateData.lastName); */
       /* username = validation.checkUsername(username); */
       userCreateData.email = validation.checkEmail(userCreateData.email);
-      userCreateData.age = validation.checkAge(userCreateData.age);
-      userCreateData.bio = validation.checkBio(userCreateData.bio);
+      /* userCreateData.age = validation.checkAge(userCreateData.age);
+      userCreateData.bio = validation.checkBio(userCreateData.bio); */
+      /* const user = await usersData.getUserByEmail(validatedEmail); // Query the database
+      if (user) {
+        console.log("user already exists with that email");
+        return res.json(user); // Return the user if found
+      } */
     } catch (e) {
       return res.status(400).json({ error: e });
     }
 
     try {
-      const { firstName, lastName, email, age, bio } = userCreateData;
+      //const { firstName, lastName, email, age, bio } = userCreateData;
+      const { email } = userCreateData;
       const userCreated = await usersData.createUser(
-        firstName,
+        /* firstName,
         lastName,
-        username,
-        email,
-        age,
-        bio
+        username, */
+        email
+        /* age,
+        bio */
       );
 
       return res.json(userCreated);

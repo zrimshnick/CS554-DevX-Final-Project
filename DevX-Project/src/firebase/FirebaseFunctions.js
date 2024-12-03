@@ -11,7 +11,7 @@ import {
   EmailAuthProvider,
   reauthenticateWithCredential,
 } from "firebase/auth";
-import { generateUsername } from "unique-username-generator";
+/* import { generateUsername } from "unique-username-generator"; */
 
 async function doCreateUserWithEmailAndPassword(email, password) {
   const auth = getAuth();
@@ -41,15 +41,16 @@ async function doSocialSignIn() {
     // Sign in with Firebase
     const result = await signInWithPopup(auth, socialProvider);
     const user = result.user;
+    console.log("here");
+    console.log(result);
 
-    // Extract user information from Firebase response
     const userData = {
-      firstName: user.displayName.split(" ")[0] || "First",
+      /* firstName: user.displayName.split(" ")[0] || "First",
       lastName: user.displayName.split(" ")[1] || "Last",
-      username: generateUsername("", 2, 19),
+      username: generateUsername("", 2, 19), */
       email: user.email,
-      age: 0, // Default age, or add age input in your app later
-      bio: "", // Default bio
+      /* age: 0, // Default age, or add age input in your app later
+      bio: "", // Default bio */
     };
 
     // Create MongoDB user
@@ -63,7 +64,8 @@ async function doSocialSignIn() {
       if (!response.ok) {
         const error = await response.json();
         console.error("Error creating user in MongoDB:", error);
-        alert("Error saving user data. Please try again.");
+        console.log("did not create user in Mongo");
+        /* alert("Error saving user data. Please try again."); */
       } else {
         console.log(
           "User successfully created in MongoDB:",

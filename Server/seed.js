@@ -11,7 +11,7 @@ console.log("SEEDING DATABASE");
 }
  */
 
-try {
+/* try {
   console.log(
     await usersData.createUser(
       "Zack",
@@ -64,6 +64,38 @@ try {
       "#99"
     )
   );
+} catch (e) {
+  console.log(e);
+}
+ */
+
+try {
+  console.log(await usersData.createUser("zrimshnick@gmail.com"));
+} catch (e) {
+  console.log(e);
+}
+try {
+  console.log(await usersData.createUser("l.james6@gmail.com"));
+} catch (e) {
+  console.log(e);
+}
+try {
+  console.log(await usersData.createUser("aaron.r12@gmail.com"));
+} catch (e) {
+  console.log(e);
+}
+try {
+  console.log(await usersData.createUser("jalenbrunson@gmail.com"));
+} catch (e) {
+  console.log(e);
+}
+try {
+  console.log(await usersData.createUser("aaron.judge@yahoo.com"));
+} catch (e) {
+  console.log(e);
+}
+try {
+  console.log(await usersData.createUser("zrimshnickAP1@gmail.com"));
 } catch (e) {
   console.log(e);
 }

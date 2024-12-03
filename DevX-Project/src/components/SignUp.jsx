@@ -10,16 +10,18 @@ import SocialSignIn from "./SocialSignIn";
 function SignUp() {
   const { currentUser } = useContext(AuthContext);
   const [emailCheck, setEmailCheck] = useState("");
+  const [emailExistsCheck, setEmailExistsCheck] = useState("");
   const [pwCheck, setPwCheck] = useState("");
   /* const [usernameCheck, setUsernameCheck] = useState(""); */
-  const [firstNameCheck, setFirstNameCheck] = useState("");
+  /* const [firstNameCheck, setFirstNameCheck] = useState("");
   const [lastNameCheck, setLastNameCheck] = useState("");
-  const [ageCheck, setAgeCheck] = useState("");
+  const [ageCheck, setAgeCheck] = useState(""); */
   const [pwMatch, setPwMatch] = useState("");
 
   const handleEmailChange = (e) => {
     console.log("handling email change");
     setEmailCheck("");
+    setEmailExistsCheck("");
   };
   const handlePasswordOneChange = (e) => {
     console.log("handling pw1 change");
@@ -33,7 +35,7 @@ function SignUp() {
     console.log("handling username change");
     setUsernameCheck("");
   }; */
-  const handleFirstNameChange = (e) => {
+  /* const handleFirstNameChange = (e) => {
     console.log("handling first name change");
     setFirstNameCheck("");
   };
@@ -44,23 +46,25 @@ function SignUp() {
   const handleAgeChange = (e) => {
     console.log("handling age change");
     setAgeCheck("");
-  };
+  }; */
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    let { email, passwordOne, passwordTwo, firstName, lastName, age } =
-      e.target.elements;
+    /* let { email, passwordOne, passwordTwo, firstName, lastName, age } =
+      e.target.elements; */
+    let { email, passwordOne, passwordTwo } = e.target.elements;
 
     let errors = {};
 
     /* INPUT VALIDATION */
     setEmailCheck("");
+    setEmailExistsCheck("");
     setPwCheck("");
     /* setUsernameCheck(""); */
     setPwMatch("");
-    setFirstNameCheck("");
+    /* setFirstNameCheck("");
     setLastNameCheck("");
-    setAgeCheck("");
+    setAgeCheck(""); */
 
     /* EMAIL */
     email.value = email.value?.trim();
@@ -116,22 +120,22 @@ function SignUp() {
     } */
 
     /* FIRST NAME */
-    firstName.value = firstName.value?.trim();
+    /* firstName.value = firstName.value?.trim();
     if (!firstName.value) {
       errors.firstName = "First name must be supplied";
     } else if (firstName.value.length < 2 || firstName.value.length > 25) {
       errors.firstName = "First name must be between 2 and 25 characters";
-    }
+    } */
 
     /* LAST NAME */
-    lastName.value = lastName.value?.trim();
+    /* lastName.value = lastName.value?.trim();
     if (!lastName.value) {
       errors.lastName = "Last name must be supplied";
     } else if (lastName.value.length < 2 || lastName.value.length > 25) {
       errors.lastName = "Last name must be between 2 and 25 characters";
-    }
+    } */
 
-    age.value = age.value?.trim();
+    /* age.value = age.value?.trim();
     age.value = parseInt(age.value);
     if (!age.value) {
       errors.age = "Age must be supplied";
@@ -139,7 +143,7 @@ function SignUp() {
       errors.age = "Age must be a whole number";
     } else if (Number(age.value < 18) || age.value > 110) {
       errors.age = "Age must be between 18 and 110";
-    }
+    } */
 
     /* PASSWORDS MATCHING */
     if (passwordOne.value !== passwordTwo.value) {
@@ -150,9 +154,9 @@ function SignUp() {
     setPwCheck(errors.password || "");
     /* setUsernameCheck(errors.username || ""); */
     setPwMatch(errors.passwordMatch || "");
-    setFirstNameCheck(errors.firstName || "");
+    /* setFirstNameCheck(errors.firstName || "");
     setLastNameCheck(errors.lastName || "");
-    setAgeCheck(errors.age || "");
+    setAgeCheck(errors.age || ""); */
 
     if (Object.keys(errors).length > 0) {
       return false;
@@ -163,18 +167,19 @@ function SignUp() {
     try {
       await doCreateUserWithEmailAndPassword(email.value, passwordOne.value);
     } catch (e) {
-      alert(e);
+      errors.emailExists = "A user already exists with this email!";
+      setEmailExistsCheck(errors.emailExists);
       return;
     }
 
     /* CREATE IN MONGODB */
     const userData = {
-      firstName: firstName.value.trim(),
-      lastName: lastName.value.trim(),
+      /* firstName: firstName.value.trim(),
+      lastName: lastName.value.trim(), */
       /* username: username.value.trim(), */
       email: email.value.trim(),
-      age: parseInt(age.value.trim(), 10),
-      bio: "", // You can collect the bio in the form if needed.
+      /* age: parseInt(age.value.trim(), 10),
+      bio: "", */ // You can collect the bio in the form if needed.
     };
 
     try {
@@ -216,6 +221,9 @@ function SignUp() {
             onChange={handleEmailChange}
           />
           {emailCheck && <div className="Auth-form-error">{emailCheck}</div>}
+          {emailExistsCheck && (
+            <div className="Auth-form-error">{emailExistsCheck}</div>
+          )}
           <input
             type="password"
             name="passwordOne"
@@ -244,7 +252,7 @@ function SignUp() {
             <div className="Auth-form-error">{usernameCheck}</div>
           )} */}
 
-          <div className="Auth-form-break"></div>
+          {/* <div className="Auth-form-break"></div>
 
           <div className="Auth-form-names-container">
             <input
@@ -275,8 +283,7 @@ function SignUp() {
           {lastNameCheck && (
             <div className="Auth-form-error">{lastNameCheck}</div>
           )}
-          {ageCheck && <div className="Auth-form-error">{ageCheck}</div>}
-
+          {ageCheck && <div className="Auth-form-error">{ageCheck}</div>} */}
           <button
             type="submit"
             id="submitButton"
