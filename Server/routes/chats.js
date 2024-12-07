@@ -37,53 +37,9 @@ router
     }
   });
 
-router
-  .route("/:id")
-  .get(async (req, res) => {
-    return "getall";
-  })
-  .post(async (req, res) => {
-    try {
-      req.params.id = validation.checkId(req.params.id);
-    } catch (e) {
-      return res.status(400).json({ error: e });
-    }
-
-    const messageCreateData = req.body;
-
-    if (!messageCreateData || Object.keys(messageCreateData).length === 0) {
-      return res.status(400).json({ error: "Request body must have fields" });
-    }
-
-    /* INPUT VALIDATION */
-    try {
-      messageCreateData.senderId = validation.checkId(
-        messageCreateData.senderId
-      );
-      messageCreateData.messageBody = validation.checkMessage(
-        messageCreateData.messageBody
-      );
-    } catch (e) {
-      return res.status(400).json({ error: e });
-    }
-
-    /* CALL MONGO */
-    try {
-      const { senderId, messageBody } = messageCreateData;
-      console.log(senderId);
-      console.log(messageBody);
-
-      const messageCreated = await chatsData.createMessage(
-        req.params.id,
-        senderId,
-        messageBody
-      );
-
-      return res.json(messageCreated);
-    } catch (e) {
-      return res.status(500).json({ error: e });
-    }
-  });
+router.route("/:id").get(async (req, res) => {
+  return "getall";
+});
 
 router.route("/:id/messages").get(async (req, res) => {
   try {
@@ -99,6 +55,47 @@ router.route("/:id/messages").get(async (req, res) => {
     } catch (e) {
       return res.status(404).json({ error: e });
     }
+  } catch (e) {
+    return res.status(500).json({ error: e });
+  }
+});
+
+router.route("/:id/add-messages").post(async (req, res) => {
+  try {
+    req.params.id = validation.checkId(req.params.id);
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
+
+  const messageCreateData = req.body;
+
+  if (!messageCreateData || Object.keys(messageCreateData).length === 0) {
+    return res.status(400).json({ error: "Request body must have fields" });
+  }
+
+  /* INPUT VALIDATION */
+  try {
+    messageCreateData.senderId = validation.checkId(messageCreateData.senderId);
+    messageCreateData.messageBody = validation.checkMessage(
+      messageCreateData.messageBody
+    );
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
+
+  /* CALL MONGO */
+  try {
+    const { senderId, messageBody } = messageCreateData;
+    console.log(senderId);
+    console.log(messageBody);
+
+    const messageCreated = await chatsData.createMessage(
+      req.params.id,
+      senderId,
+      messageBody
+    );
+
+    return res.json(messageCreated);
   } catch (e) {
     return res.status(500).json({ error: e });
   }

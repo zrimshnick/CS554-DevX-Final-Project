@@ -8,7 +8,7 @@ import Chat from "./Chat";
 
 function Chatroom() {
   const { currentUser } = useContext(AuthContext);
-  console.log(currentUser);
+  /* console.log(currentUser); */
 
   const [state, setState] = useState({
     message: "",
@@ -18,6 +18,7 @@ function Chatroom() {
   const [openChats, setOpenChats] = useState([]);
   const [chatRoomId, setChatRoomId] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [activePartnerId, setActivePartnerId] = useState(null);
   const [partnersDetails, setPartnersDetails] = useState({});
   const messagesEndRef = useRef(null);
 
@@ -160,7 +161,6 @@ function Chatroom() {
     }
 
     try {
-      // Make an API call to get the existing chat room ID
       console.log(`currentUserId: `, currentUserId);
       console.log(`partnerId: `, partnerId);
       const response = await fetch(
@@ -179,55 +179,81 @@ function Chatroom() {
       console.log(data);
 
       const chatRoomId = data._id;
+      const messages = data.messages || [];
+      console.log(messages);
 
       setChatRoomId(chatRoomId);
+      setChat(messages);
+      console.log("CHAT HERE:");
+      console.log(chat);
 
-      // Join the room using the chatRoomId retrieved from the server
       socketRef.current.emit("join_room", chatRoomId);
+
+      setActivePartnerId(partnerId);
     } catch (error) {
       console.error("Error joining room:", error);
       alert("Could not join the chat room. Please try again.");
     }
   };
 
-  /* const onMessageSubmit = (e) => {
-    let msgEle = document.getElementById("message");
-    console.log([msgEle.name], msgEle.value);
-    setState({ ...state, [msgEle.name]: msgEle.value });
-    console.log("going to send the message event to the server");
+  useEffect(() => {
+    if (chatRoomId) {
+      socketRef.current.emit("join_room", chatRoomId);
+    }
+  }, [chatRoomId]);
 
-    const roomName = [currentUser.email, state.name].sort().join("-");
-    socketRef.current.emit("message", {
-      name: state.name,
-      message: msgEle.value,
-      roomName,
-    });
-    e.preventDefault();
-    setState({ message: "", name: state.name });
-    msgEle.value = "";
-    msgEle.focus();
-  }; */
-  const onMessageSubmit = (e) => {
+  const onMessageSubmit = async (e) => {
     e.preventDefault();
     let msgEle = document.getElementById("message");
+
+    if (!chatRoomId || !msgEle.value.trim()) return;
+
     console.log([msgEle.name], msgEle.value);
 
-    setState({ ...state, [msgEle.name]: msgEle.value });
+    const newMessage = {
+      senderId: currentUserId,
+      messageBody: msgEle.value,
+    };
+
+    socketRef.current.emit("message", newMessage);
+
+    setChat((prevChat) => [...prevChat, newMessage]);
 
     console.log("Going to send the message event to the server");
 
-    if (chatRoomId) {
-      socketRef.current.emit("message", {
-        chatRoomId: chatRoomId,
-        senderId: currentUserId,
-        messageBody: msgEle.value,
-      });
+    /* MONGO CALL */
+    try {
+      const response = await fetch(
+        `http://localhost:3000/chat/${chatRoomId}/add-messages`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newMessage),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error saving message to database");
+      }
+    } catch (e) {
+      console.error("Error saving message to mongodb:", e);
+      alert("Could save the message. try again");
     }
 
-    setState({ message: "", name: state.name });
+    /* setState({ message: "", name: state.name }); */
     msgEle.value = "";
     msgEle.focus();
   };
+
+  useEffect(() => {
+    socketRef.current.on("message", (newMessage) => {
+      setChat((prevChat) => [...prevChat, newMessage]);
+    });
+
+    return () => {
+      socketRef.current.off("message");
+    };
+  }, []);
 
   return (
     <div className="Chats-container">
@@ -235,7 +261,14 @@ function Chatroom() {
         <div className="Chats-sidebar-header">Chats</div>
         <div className="Chats-sidebar-links">
           {openChats.map((partnerId) => (
-            <button onClick={() => joinRoom(partnerId)}>
+            <button
+              key={partnerId}
+              className="Chats-sidebar-link"
+              onClick={() => joinRoom(partnerId)}
+              style={{
+                backgroundColor: activePartnerId === partnerId ? "#af8f6f" : "",
+              }}
+            >
               {partnersDetails[partnerId] || "Loading..."}
             </button>
           ))}
@@ -243,7 +276,10 @@ function Chatroom() {
       </div>
       <div className="Chats-console-container">
         <div className="Chats-console-header">
-          <div>Chat with Name</div>
+          <div>
+            {`Chat with ${partnersDetails[activePartnerId]}` ||
+              "Select a partner"}
+          </div>
         </div>
         <div className="Chats-console-messages">
           <Chat chat={chat} />

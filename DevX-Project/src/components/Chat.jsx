@@ -2,11 +2,17 @@ import React from "react";
 import "../App.css";
 import "./Chats.css";
 
-export default function Chat({ chat }) {
-  return chat.map(({ name, message }, index) => (
-    <div className="Chats-message" key={index}>
+export default function Chat({ chat, currentUserId }) {
+  return chat.map(({ senderId, messageBody }, index) => (
+    <div
+      className={`Chats-message ${
+        senderId === currentUserId ? "Chats-message-own" : "Chats-message-other"
+      }`}
+      key={index}
+    >
       <div>
-        {name}: <span>{message}</span>
+        <strong>{senderId === currentUserId ? "You" : senderId}</strong>:{" "}
+        <span>{messageBody}</span>
       </div>
     </div>
   ));

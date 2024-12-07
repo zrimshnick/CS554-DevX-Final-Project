@@ -15,7 +15,6 @@ const io = new Server(httpServer, {
   },
 });
 
-/* UPDATED SOCKET SERVER */
 const uri =
   "mongodb+srv://developer:passw0rd123!@devx-project.wrdgk.mongodb.net/";
 const dbName = "DevX-Project-Database";
@@ -38,17 +37,13 @@ connectToDb().then(() => {
   io.on("connection", (socket) => {
     console.log("New client connected", socket.id);
 
-    socket.on("user_join", (name, userId) => {
-      console.log(`${name} with userId ${userId} has joined the chat`);
-      socket.userId = userId; // Store the userId in the socket object
-
-      socket.join(roomName);
-
-      socket.broadcast
-        .to(roomName)
-        .emit("user_join", `${name} has joined the chat`);
+    // User joins a specific chatroom
+    socket.on("join_room", (chatRoomId) => {
+      socket.join(chatRoomId);
+      console.log(`User joined chatroom: ${chatRoomId}`);
     });
 
+    // Handle sending a message
     socket.on("message", async ({ chatRoomId, senderId, messageBody }) => {
       console.log(
         `Message from ${senderId}: ${messageBody} in chatroom: ${chatRoomId}`
@@ -59,10 +54,7 @@ connectToDb().then(() => {
         return;
       }
 
-      console.log(senderId);
-      console.log("chatRoomId:", chatRoomId);
-
-      /* CREATE */
+      // Create message object
       const newMessageContent = {
         chatId: new ObjectId(chatRoomId),
         senderId: new ObjectId(senderId),
@@ -70,31 +62,18 @@ connectToDb().then(() => {
       };
 
       const chatsCollection = db.collection("chats");
-      const usersCollection = db.collection("users");
 
-      const foundSender = await usersCollection.findOne({
-        _id: new ObjectId(senderId.toString()),
-      });
-      if (foundSender) {
-        console.log("sender exists");
-      } else {
-        throw "Error: sender not found";
-      }
-
-      /* ADD MESSAGE TO CHAT */
-      const addedToChat = await chatsCollection.updateOne(
+      // Add message to the database
+      await chatsCollection.updateOne(
         { _id: new ObjectId(chatRoomId) },
-        {
-          $addToSet: {
-            messages: newMessageContent,
-          },
-        }
+        { $push: { messages: newMessageContent } } // Use $push for ordered messages
       );
 
-      console.log(addedToChat);
-
-      // Broadcast the message to the specific chatroom
-      io.to(chatRoomId).emit("message", { senderId, messageBody });
+      // Emit the message to everyone in the room
+      io.to(chatRoomId).emit("message", {
+        senderId,
+        messageBody,
+      });
     });
 
     // Event when a user disconnects
@@ -102,23 +81,6 @@ connectToDb().then(() => {
       console.log("Client disconnected", socket.id);
     });
   });
-
-  // Load chat history for a specific chatroom from MongoDB
-  /* const loadChatHistory = async (chatRoomId, socket) => {
-    try {
-      const chatCollection = db.collection("chats");
-      const chatRoom = await chatCollection.findOne({
-        $or: [{ user1: chatRoomId }, { user2: chatRoomId }],
-      });
-
-      if (chatRoom && chatRoom.messages) {
-        // Send the chat history to the user who joined the chatroom
-        socket.emit("chat_history", chatRoom.messages);
-      }
-    } catch (error) {
-      console.error("Error loading chat history:", error);
-    }
-  }; */
 
   httpServer.listen(4000, () => {
     console.log("Server is running on http://localhost:4000");
