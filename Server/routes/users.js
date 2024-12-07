@@ -8,7 +8,13 @@ import * as validation from "../validation.js";
 router
   .route("/")
   .get(async (req, res) => {
-    return "getall";
+    try {
+      const allUsers = await usersData.getAllUsers();
+
+      return res.json(allUsers);
+    } catch (e) {
+      return res.status(500).json({ error: e });
+    }
   })
   .post(async (req, res) => {
     const userCreateData = req.body;
@@ -53,8 +59,35 @@ router
     }
   });
 
-router.route("/:id").get(async (req, res) => {
-  /* GET USER */
+/* router.route("/:id").get(async (req, res) => {
+  try {
+    req.params.id = validation.checkId(req.params.id);
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
+
+  try {
+    const userFound = await usersData.getUser(req.params.id);
+    return res.json(userFound);
+  } catch (e) {
+    return res.status(404).json({ error: e });
+  }
+}); */
+router.route("/:email").get(async (req, res) => {
+  try {
+    req.params.email = validation.checkEmail(req.params.email);
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
+
+  try {
+    const userFound = await usersData.getUserByEmail(req.params.email);
+    return res.json(userFound);
+  } catch (e) {
+    return res.status(404).json({ error: e });
+  }
+});
+router.route("/id/:id").get(async (req, res) => {
   try {
     req.params.id = validation.checkId(req.params.id);
   } catch (e) {

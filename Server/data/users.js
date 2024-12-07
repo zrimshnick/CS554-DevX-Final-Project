@@ -26,6 +26,8 @@ export const createUser = async (
     email: email,
     /* age: age,
     bio: bio, */
+    chats: [],
+    openChatPartners: [],
   };
 
   const usersCollection = await users();
@@ -49,6 +51,14 @@ export const createUser = async (
   } else {
     throw "Error: no user with that id";
   }
+};
+
+export const getAllUsers = async () => {
+  const usersCollection = await users();
+
+  const allUsers = await usersCollection.find({}).toArray();
+
+  return allUsers;
 };
 
 export const getUser = async (userId) => {

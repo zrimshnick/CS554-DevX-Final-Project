@@ -65,6 +65,15 @@ export const checkBio = (bio) => {
   return bio;
 };
 
+export const checkMessage = (message) => {
+  if (message === undefined) throw "Error: All fields need to be supplied";
+  if (typeof message !== "string") throw "Error: message must be a string";
+  message = message.trim();
+  if (message.length > 160) throw "Error: message character limit is 160";
+
+  return message;
+};
+
 export const checkId = (id) => {
   if (!id) throw "Error: id not provided";
   if (typeof id !== "string") throw "Error: id must be a string";
