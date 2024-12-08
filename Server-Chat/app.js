@@ -40,7 +40,7 @@ connectToDb().then(() => {
     // User joins a specific chatroom
     socket.on("join_room", (chatRoomId) => {
       socket.join(chatRoomId);
-      console.log(`User joined chatroom: ${chatRoomId}`);
+      console.log(`User ${socket.id} joined chatroom: ${chatRoomId}`);
     });
 
     // Handle sending a message
@@ -66,10 +66,12 @@ connectToDb().then(() => {
       // Add message to the database
       await chatsCollection.updateOne(
         { _id: new ObjectId(chatRoomId) },
-        { $push: { messages: newMessageContent } } // Use $push for ordered messages
+        { $push: { messages: newMessageContent } }
       );
 
       // Emit the message to everyone in the room
+      console.log(`emitting to room: ${chatRoomId}`);
+      console.log(`Socket rooms:`, Array.from(socket.rooms));
       io.to(chatRoomId).emit("message", {
         senderId,
         messageBody,

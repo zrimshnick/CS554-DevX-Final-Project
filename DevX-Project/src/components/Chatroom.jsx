@@ -38,9 +38,9 @@ function Chatroom() {
   }, []);
 
   useEffect(() => {
-    socketRef.current.on("message", ({ name, message }) => {
-      console.log("The server has broadcast message data to all clients");
-      setChat([...chat, { name, message }]);
+    socketRef.current.on("message", (newMessage) => {
+      console.log("New message received:", newMessage);
+      setChat((prevChat) => [...prevChat, newMessage]);
     });
     socketRef.current.on("user_join", function (data) {
       console.log("The server has broadcast user join data to all clients");
@@ -187,6 +187,7 @@ function Chatroom() {
       console.log("CHAT HERE:");
       console.log(chat);
 
+      console.log(`joined room: ${chatRoomId}`);
       socketRef.current.emit("join_room", chatRoomId);
 
       setActivePartnerId(partnerId);
@@ -199,6 +200,7 @@ function Chatroom() {
   useEffect(() => {
     if (chatRoomId) {
       socketRef.current.emit("join_room", chatRoomId);
+      console.log(`Joined room ${chatRoomId}`);
     }
   }, [chatRoomId]);
 
@@ -211,13 +213,15 @@ function Chatroom() {
     console.log([msgEle.name], msgEle.value);
 
     const newMessage = {
+      chatRoomId: chatRoomId,
       senderId: currentUserId,
       messageBody: msgEle.value,
     };
 
+    console.log(`emitting message client side: ${newMessage}`);
     socketRef.current.emit("message", newMessage);
 
-    setChat((prevChat) => [...prevChat, newMessage]);
+    /* setChat((prevChat) => [...prevChat, newMessage]); */
 
     console.log("Going to send the message event to the server");
 
@@ -240,13 +244,13 @@ function Chatroom() {
       alert("Could save the message. try again");
     }
 
-    /* setState({ message: "", name: state.name }); */
     msgEle.value = "";
     msgEle.focus();
   };
 
   useEffect(() => {
     socketRef.current.on("message", (newMessage) => {
+      console.log("New message received:", newMessage);
       setChat((prevChat) => [...prevChat, newMessage]);
     });
 
@@ -282,7 +286,7 @@ function Chatroom() {
           </div>
         </div>
         <div className="Chats-console-messages">
-          <Chat chat={chat} />
+          <Chat chat={chat} currentUserId={currentUserId} />
           <div ref={messagesEndRef} />
         </div>
         <form className="Chats-console-form" onSubmit={onMessageSubmit}>
