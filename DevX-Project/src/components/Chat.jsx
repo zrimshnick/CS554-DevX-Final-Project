@@ -13,10 +13,11 @@ export default function Chat({ chat, currentUserId }) {
       }`}
       key={index}
     >
-      <div>
-        <strong>{senderId === currentUserId ? "You" : senderId}</strong>:{" "}
-        <span>{messageBody}</span>
-      </div>
+      <span className="Chats-message-sender">
+        {senderId === currentUserId ? "You" : senderId}
+      </span>
+      &nbsp;&nbsp;
+      <span className="Chats-message-body">{messageBody}</span>
     </div>
   ));
 }

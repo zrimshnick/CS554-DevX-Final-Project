@@ -24,7 +24,7 @@
 }
 .Chats-sidebar-header {
   /* padding-top: 1rem; */
-  font-size: 2em;
+  font-size: 1.75em;
   width: 100%;
   text-align: center;
   font-weight: bold;
@@ -90,7 +90,7 @@
   background-color: #f8f4e1;
   box-shadow: 0 2px 8px #54331054;
   text-align: center;
-  font-size: 2em;
+  font-size: 1.75em;
   font-weight: bold;
   flex-shrink: 0;
   position: sticky;
@@ -111,7 +111,6 @@
 }
 .Chats-message {
   height: 1.5rem;
-  max-width: 90%;
   background-color: #f8f4e1;
   margin: 0.1rem 0.1rem;
   word-wrap: break-word;
@@ -146,4 +145,36 @@
     cursor: pointer;
     background-color: #543310;
   }
+}
+
+.Chars-console-messages {
+  width: 100%;
+}
+.Chats-message {
+  max-width: 100%;
+  text-wrap: wrap;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.Chats-message-own {
+  text-align: right;
+  display: flex;
+  flex-direction: row-reverse;
+}
+.Chats-message-other {
+  text-align: left;
+}
+
+.Chats-message-sender {
+  font-weight: bold;
+}
+.Chats-message-body {
+  text-wrap: wrap;
+  max-width: 100%;
+  background-color: antiquewhite;
+  border-radius: 1rem;
+  border: 1px solid antiquewhite;
+  padding: 0.25rem 0.5rem;
 }
