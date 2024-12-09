@@ -1,6 +1,6 @@
 ---------------------------------
 **TO RUN MAIN SERVER:**
-from main directory "CS554-DevX-Final-Project":
+- from main directory "CS554-DevX-Final-Project":
 1. cd Server
 2. npm i
 3. npm start
