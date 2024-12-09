@@ -129,6 +129,9 @@ function Chatroom() {
       }
 
       const partnerData = await response.json();
+      console.log("PARTNER DATA HERERERERERERERER");
+      console.log(partnerData);
+      console.log("...............................");
       const partnerEmail = partnerData.email;
 
       setPartnersDetails((prevState) => ({
@@ -259,6 +262,10 @@ function Chatroom() {
     };
   }, []);
 
+  console.log("PARTNER DETAILS-----------:");
+  console.log(partnersDetails);
+  console.log("-----------------------");
+
   return (
     <div className="Chats-container">
       <div className="Chats-sidebar-container">
@@ -281,8 +288,9 @@ function Chatroom() {
       <div className="Chats-console-container">
         <div className="Chats-console-header">
           <div>
-            {`Chat with ${partnersDetails[activePartnerId]}` ||
-              "Select a partner"}
+            {partnersDetails[activePartnerId] === undefined
+              ? "Start Connecting!"
+              : `Chat with ${partnersDetails[activePartnerId]}`}
           </div>
         </div>
         <div className="Chats-console-messages">
