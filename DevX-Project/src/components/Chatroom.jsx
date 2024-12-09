@@ -136,7 +136,8 @@ function Chatroom() {
 
       setPartnersDetails((prevState) => ({
         ...prevState,
-        [partnerId]: partnerEmail,
+        /* [partnerId]: partnerEmail, */
+        [partnerId]: partnerData,
       }));
 
       console.log(partnerEmail);
@@ -280,7 +281,9 @@ function Chatroom() {
                 backgroundColor: activePartnerId === partnerId ? "#af8f6f" : "",
               }}
             >
-              {partnersDetails[partnerId] || "Loading..."}
+              {partnersDetails[partnerId] === undefined
+                ? "Loading..."
+                : `${partnersDetails[partnerId].firstName} ${partnersDetails[partnerId].lastName}`}
             </button>
           ))}
         </div>
@@ -290,11 +293,15 @@ function Chatroom() {
           <div>
             {partnersDetails[activePartnerId] === undefined
               ? "Start Connecting!"
-              : `Chat with ${partnersDetails[activePartnerId]}`}
+              : `Chat with ${partnersDetails[activePartnerId].firstName}`}
           </div>
         </div>
         <div className="Chats-console-messages">
-          <Chat chat={chat} currentUserId={currentUserId} />
+          <Chat
+            chat={chat}
+            currentUserId={currentUserId}
+            activePartnerDetails={partnersDetails[activePartnerId]}
+          />
           <div ref={messagesEndRef} />
         </div>
         <form className="Chats-console-form" onSubmit={onMessageSubmit}>

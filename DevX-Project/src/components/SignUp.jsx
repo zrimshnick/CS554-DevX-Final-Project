@@ -13,9 +13,9 @@ function SignUp() {
   const [emailExistsCheck, setEmailExistsCheck] = useState("");
   const [pwCheck, setPwCheck] = useState("");
   /* const [usernameCheck, setUsernameCheck] = useState(""); */
-  /* const [firstNameCheck, setFirstNameCheck] = useState("");
+  const [firstNameCheck, setFirstNameCheck] = useState("");
   const [lastNameCheck, setLastNameCheck] = useState("");
-  const [ageCheck, setAgeCheck] = useState(""); */
+  /*const [ageCheck, setAgeCheck] = useState(""); */
   const [pwMatch, setPwMatch] = useState("");
 
   const handleEmailChange = (e) => {
@@ -35,7 +35,7 @@ function SignUp() {
     console.log("handling username change");
     setUsernameCheck("");
   }; */
-  /* const handleFirstNameChange = (e) => {
+  const handleFirstNameChange = (e) => {
     console.log("handling first name change");
     setFirstNameCheck("");
   };
@@ -43,6 +43,7 @@ function SignUp() {
     console.log("handling last name change");
     setLastNameCheck("");
   };
+  /*
   const handleAgeChange = (e) => {
     console.log("handling age change");
     setAgeCheck("");
@@ -52,7 +53,8 @@ function SignUp() {
     e.preventDefault();
     /* let { email, passwordOne, passwordTwo, firstName, lastName, age } =
       e.target.elements; */
-    let { email, passwordOne, passwordTwo } = e.target.elements;
+    let { email, passwordOne, passwordTwo, firstName, lastName } =
+      e.target.elements;
 
     let errors = {};
 
@@ -62,9 +64,9 @@ function SignUp() {
     setPwCheck("");
     /* setUsernameCheck(""); */
     setPwMatch("");
-    /* setFirstNameCheck("");
+    setFirstNameCheck("");
     setLastNameCheck("");
-    setAgeCheck(""); */
+    /*setAgeCheck(""); */
 
     /* EMAIL */
     email.value = email.value?.trim();
@@ -120,20 +122,20 @@ function SignUp() {
     } */
 
     /* FIRST NAME */
-    /* firstName.value = firstName.value?.trim();
+    firstName.value = firstName.value?.trim();
     if (!firstName.value) {
       errors.firstName = "First name must be supplied";
     } else if (firstName.value.length < 2 || firstName.value.length > 25) {
       errors.firstName = "First name must be between 2 and 25 characters";
-    } */
+    }
 
     /* LAST NAME */
-    /* lastName.value = lastName.value?.trim();
+    lastName.value = lastName.value?.trim();
     if (!lastName.value) {
       errors.lastName = "Last name must be supplied";
     } else if (lastName.value.length < 2 || lastName.value.length > 25) {
       errors.lastName = "Last name must be between 2 and 25 characters";
-    } */
+    }
 
     /* age.value = age.value?.trim();
     age.value = parseInt(age.value);
@@ -154,9 +156,9 @@ function SignUp() {
     setPwCheck(errors.password || "");
     /* setUsernameCheck(errors.username || ""); */
     setPwMatch(errors.passwordMatch || "");
-    /* setFirstNameCheck(errors.firstName || "");
+    setFirstNameCheck(errors.firstName || "");
     setLastNameCheck(errors.lastName || "");
-    setAgeCheck(errors.age || ""); */
+    /*setAgeCheck(errors.age || ""); */
 
     if (Object.keys(errors).length > 0) {
       return false;
@@ -174,9 +176,8 @@ function SignUp() {
 
     /* CREATE IN MONGODB */
     const userData = {
-      /* firstName: firstName.value.trim(),
-      lastName: lastName.value.trim(), */
-      /* username: username.value.trim(), */
+      firstName: firstName.value.trim(),
+      lastName: lastName.value.trim(),
       email: email.value.trim(),
       /* age: parseInt(age.value.trim(), 10),
       bio: "", */ // You can collect the bio in the form if needed.
@@ -252,7 +253,7 @@ function SignUp() {
             <div className="Auth-form-error">{usernameCheck}</div>
           )} */}
 
-          {/* <div className="Auth-form-break"></div>
+          <div className="Auth-form-break"></div>
 
           <div className="Auth-form-names-container">
             <input
@@ -269,13 +270,13 @@ function SignUp() {
               className="Auth-input-name"
               onChange={handleLastNameChange}
             />
-            <input
+            {/* <input
               type="text"
               placeholder="Age"
               name="age"
               className="Auth-input-age"
               onChange={handleAgeChange}
-            />
+            /> */}
           </div>
           {firstNameCheck && (
             <div className="Auth-form-error">{firstNameCheck}</div>
@@ -283,7 +284,7 @@ function SignUp() {
           {lastNameCheck && (
             <div className="Auth-form-error">{lastNameCheck}</div>
           )}
-          {ageCheck && <div className="Auth-form-error">{ageCheck}</div>} */}
+          {/* {ageCheck && <div className="Auth-form-error">{ageCheck}</div>} */}
           <button
             type="submit"
             id="submitButton"

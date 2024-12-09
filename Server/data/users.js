@@ -3,26 +3,23 @@ import * as validation from "../validation.js";
 import { ObjectId } from "mongodb";
 
 export const createUser = async (
-  /* firstName,
+  firstName,
   lastName,
-  username, */
   email
   /* age,
   bio */
 ) => {
   /* INPUT VALIDATION */
-  /* firstName = validation.checkName(firstName);
+  firstName = validation.checkName(firstName);
   lastName = validation.checkName(lastName);
-  username = validation.checkUsername(username); */
   email = validation.checkEmail(email);
   /* age = validation.checkAge(age);
   bio = validation.checkBio(bio); */
 
   /* CREATE */
   const newUserContent = {
-    /* firstName: firstName,
+    firstName: firstName,
     lastName: lastName,
-    username: username, */
     email: email,
     /* age: age,
     bio: bio, */

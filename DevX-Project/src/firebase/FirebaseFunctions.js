@@ -41,13 +41,10 @@ async function doSocialSignIn() {
     // Sign in with Firebase
     const result = await signInWithPopup(auth, socialProvider);
     const user = result.user;
-    console.log("here");
-    console.log(result);
 
     const userData = {
-      /* firstName: user.displayName.split(" ")[0] || "First",
+      firstName: user.displayName.split(" ")[0] || "First",
       lastName: user.displayName.split(" ")[1] || "Last",
-      username: generateUsername("", 2, 19), */
       email: user.email,
       /* age: 0, // Default age, or add age input in your app later
       bio: "", // Default bio */
