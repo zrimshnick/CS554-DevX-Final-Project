@@ -26,9 +26,8 @@ router
     const username = generateUsername("", 2, 19);
     /* INPUT VALIDATION */
     try {
-      /* userCreateData.firstName = validation.checkName(userCreateData.firstName);
-      userCreateData.lastName = validation.checkName(userCreateData.lastName); */
-      /* username = validation.checkUsername(username); */
+      userCreateData.firstName = validation.checkName(userCreateData.firstName);
+      userCreateData.lastName = validation.checkName(userCreateData.lastName);
       userCreateData.email = validation.checkEmail(userCreateData.email);
       /* userCreateData.age = validation.checkAge(userCreateData.age);
       userCreateData.bio = validation.checkBio(userCreateData.bio); */
@@ -43,11 +42,10 @@ router
 
     try {
       //const { firstName, lastName, email, age, bio } = userCreateData;
-      const { email } = userCreateData;
+      const { firstName, lastName, email } = userCreateData;
       const userCreated = await usersData.createUser(
-        /* firstName,
+        firstName,
         lastName,
-        username, */
         email
         /* age,
         bio */

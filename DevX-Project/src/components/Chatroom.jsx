@@ -129,11 +129,15 @@ function Chatroom() {
       }
 
       const partnerData = await response.json();
+      console.log("PARTNER DATA HERERERERERERERER");
+      console.log(partnerData);
+      console.log("...............................");
       const partnerEmail = partnerData.email;
 
       setPartnersDetails((prevState) => ({
         ...prevState,
-        [partnerId]: partnerEmail,
+        /* [partnerId]: partnerEmail, */
+        [partnerId]: partnerData,
       }));
 
       console.log(partnerEmail);
@@ -259,6 +263,10 @@ function Chatroom() {
     };
   }, []);
 
+  console.log("PARTNER DETAILS-----------:");
+  console.log(partnersDetails);
+  console.log("-----------------------");
+
   return (
     <div className="Chats-container">
       <div className="Chats-sidebar-container">
@@ -273,7 +281,9 @@ function Chatroom() {
                 backgroundColor: activePartnerId === partnerId ? "#af8f6f" : "",
               }}
             >
-              {partnersDetails[partnerId] || "Loading..."}
+              {partnersDetails[partnerId] === undefined
+                ? "Loading..."
+                : `${partnersDetails[partnerId].firstName} ${partnersDetails[partnerId].lastName}`}
             </button>
           ))}
         </div>
@@ -281,12 +291,17 @@ function Chatroom() {
       <div className="Chats-console-container">
         <div className="Chats-console-header">
           <div>
-            {`Chat with ${partnersDetails[activePartnerId]}` ||
-              "Select a partner"}
+            {partnersDetails[activePartnerId] === undefined
+              ? "Start Connecting!"
+              : `Chat with ${partnersDetails[activePartnerId].firstName}`}
           </div>
         </div>
         <div className="Chats-console-messages">
-          <Chat chat={chat} currentUserId={currentUserId} />
+          <Chat
+            chat={chat}
+            currentUserId={currentUserId}
+            activePartnerDetails={partnersDetails[activePartnerId]}
+          />
           <div ref={messagesEndRef} />
         </div>
         <form className="Chats-console-form" onSubmit={onMessageSubmit}>
