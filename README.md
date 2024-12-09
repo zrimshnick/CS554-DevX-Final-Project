@@ -1,9 +1,9 @@
 ---------------------------------
 **TO RUN MAIN SERVER:**
 
-cd Server
-npm i
-npm start
+1. cd Server
+2. npm i
+3. npm start
 
 starts server on localhost:3000
 
