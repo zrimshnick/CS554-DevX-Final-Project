@@ -50,6 +50,7 @@ function SignIn() {
 
   return (
     <div className="Auth">
+      <div className="Auth-background"></div>
       <div className="Auth-form-container">
         <h2 className="Auth-form-header">Sign in to your account</h2>
         <form className="Auth-form" onSubmit={handleLogIn}>

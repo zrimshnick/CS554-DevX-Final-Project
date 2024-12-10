@@ -69,6 +69,7 @@ function Auth() {
 
   return (
     <div className="Auth">
+      <div className="Auth-background"></div>
       <div className="Auth-intro-container">
         <h1 className="Auth-catchphrase">
           Brew New Friendships, One Coffee at a Time

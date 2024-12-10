@@ -3,12 +3,11 @@ import { AuthContext } from "../context/AuthContext";
 import io from "socket.io-client";
 import "../App.css";
 import "./Chats.css";
-import { Route, Link, Routes } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Chat from "./Chat";
 
 function Chatroom() {
   const { currentUser } = useContext(AuthContext);
-  /* console.log(currentUser); */
 
   const [state, setState] = useState({
     message: "",
@@ -21,6 +20,20 @@ function Chatroom() {
   const [activePartnerId, setActivePartnerId] = useState(null);
   const [partnersDetails, setPartnersDetails] = useState({});
   const messagesEndRef = useRef(null);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/chats") {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [location.pathname]);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -39,11 +52,9 @@ function Chatroom() {
 
   useEffect(() => {
     socketRef.current.on("message", (newMessage) => {
-      console.log("New message received:", newMessage);
       setChat((prevChat) => [...prevChat, newMessage]);
     });
     socketRef.current.on("user_join", function (data) {
-      console.log("The server has broadcast user join data to all clients");
       setChat([
         ...chat,
         { name: "ChatBot", message: `${data} has joined the chat` },
@@ -84,7 +95,6 @@ function Chatroom() {
   }, []);
 
   const userjoin = (name) => {
-    console.log("Going to send the user join event to the server");
     socketRef.current.emit("user_join", name, currentUserId);
   };
 
@@ -106,8 +116,6 @@ function Chatroom() {
       const currentUserId = currentUserMongoData._id;
 
       setCurrentUserId(currentUserId);
-
-      console.log(currentUserId);
     } catch (error) {
       console.error("Error getting user id:", error);
       alert("Could not fetch user id. Please try again.");
@@ -129,9 +137,6 @@ function Chatroom() {
       }
 
       const partnerData = await response.json();
-      console.log("PARTNER DATA HERERERERERERERER");
-      console.log(partnerData);
-      console.log("...............................");
       const partnerEmail = partnerData.email;
 
       setPartnersDetails((prevState) => ({
@@ -139,8 +144,6 @@ function Chatroom() {
         /* [partnerId]: partnerEmail, */
         [partnerId]: partnerData,
       }));
-
-      console.log(partnerEmail);
     } catch (error) {
       console.error("Error getting partner emails:", error);
       alert("Could not fetch partner emails. Please try again.");
@@ -165,8 +168,6 @@ function Chatroom() {
     }
 
     try {
-      console.log(`currentUserId: `, currentUserId);
-      console.log(`partnerId: `, partnerId);
       const response = await fetch(
         `http://localhost:3000/chat/${currentUserId}/${partnerId}`,
         {
@@ -180,18 +181,12 @@ function Chatroom() {
       }
 
       const data = await response.json();
-      console.log(data);
-
       const chatRoomId = data._id;
       const messages = data.messages || [];
-      console.log(messages);
 
       setChatRoomId(chatRoomId);
       setChat(messages);
-      console.log("CHAT HERE:");
-      console.log(chat);
 
-      console.log(`joined room: ${chatRoomId}`);
       socketRef.current.emit("join_room", chatRoomId);
 
       setActivePartnerId(partnerId);
@@ -204,7 +199,6 @@ function Chatroom() {
   useEffect(() => {
     if (chatRoomId) {
       socketRef.current.emit("join_room", chatRoomId);
-      console.log(`Joined room ${chatRoomId}`);
     }
   }, [chatRoomId]);
 
@@ -214,20 +208,13 @@ function Chatroom() {
 
     if (!chatRoomId || !msgEle.value.trim()) return;
 
-    console.log([msgEle.name], msgEle.value);
-
     const newMessage = {
       chatRoomId: chatRoomId,
       senderId: currentUserId,
       messageBody: msgEle.value,
     };
 
-    console.log(`emitting message client side: ${newMessage}`);
     socketRef.current.emit("message", newMessage);
-
-    /* setChat((prevChat) => [...prevChat, newMessage]); */
-
-    console.log("Going to send the message event to the server");
 
     /* MONGO CALL */
     try {
@@ -254,7 +241,6 @@ function Chatroom() {
 
   useEffect(() => {
     socketRef.current.on("message", (newMessage) => {
-      console.log("New message received:", newMessage);
       setChat((prevChat) => [...prevChat, newMessage]);
     });
 
@@ -262,10 +248,6 @@ function Chatroom() {
       socketRef.current.off("message");
     };
   }, []);
-
-  console.log("PARTNER DETAILS-----------:");
-  console.log(partnersDetails);
-  console.log("-----------------------");
 
   return (
     <div className="Chats-container">

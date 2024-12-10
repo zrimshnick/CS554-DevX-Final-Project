@@ -135,6 +135,7 @@ export const createMessage = async (chatId, senderId, messageBody) => {
     chatId: new ObjectId(chatId),
     senderId: new ObjectId(senderId),
     messageBody: messageBody,
+    timestamp: new Date(),
   };
 
   const chatsCollection = await chats();
@@ -159,7 +160,15 @@ export const createMessage = async (chatId, senderId, messageBody) => {
     }
   );
 
-  console.log(addedToChat);
+  if (addedToChat.matchedCount === 0) {
+    throw "Error: chat not found";
+  } else if (addedToChat.modifiedCount === 0) {
+    console.log("Message already exists in chat");
+  } else {
+    console.log("Message added to chat successfully");
+  }
+
+  return addedToChat;
 };
 
 export const getAllMessages = async (chatId) => {

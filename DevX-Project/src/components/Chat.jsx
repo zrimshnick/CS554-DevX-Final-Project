@@ -3,10 +3,6 @@ import "../App.css";
 import "./Chats.css";
 
 export default function Chat({ chat, currentUserId, activePartnerDetails }) {
-  console.log(chat);
-  console.log(currentUserId);
-  console.log(activePartnerDetails);
-
   return chat.map(({ senderId, messageBody }, index) => (
     <div
       className={`Chats-message ${
