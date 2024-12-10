@@ -21,6 +21,10 @@ darkest-brown: #3b240b
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  margin: 0;
+}
+
 a {
   text-decoration: none;
 }

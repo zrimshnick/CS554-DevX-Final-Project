@@ -15,7 +15,7 @@ const io = new Server(httpServer, {
   },
 });
 
-const uri =
+/* const uri =
   "mongodb+srv://developer:passw0rd123!@devx-project.wrdgk.mongodb.net/";
 const dbName = "DevX-Project-Database";
 let db;
@@ -31,31 +31,31 @@ const connectToDb = async () => {
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
   }
-};
+}; */
 
-connectToDb().then(() => {
-  io.on("connection", (socket) => {
-    console.log("New client connected", socket.id);
+/* connectToDb().then(() => { */
+io.on("connection", (socket) => {
+  console.log("New client connected", socket.id);
 
-    // User joins a specific chatroom
-    socket.on("join_room", (chatRoomId) => {
-      socket.join(chatRoomId);
-      console.log(`User ${socket.id} joined chatroom: ${chatRoomId}`);
-    });
+  // User joins a specific chatroom
+  socket.on("join_room", (chatRoomId) => {
+    socket.join(chatRoomId);
+    console.log(`User ${socket.id} joined chatroom: ${chatRoomId}`);
+  });
 
-    // Handle sending a message
-    socket.on("message", async ({ chatRoomId, senderId, messageBody }) => {
-      console.log(
-        `Message from ${senderId}: ${messageBody} in chatroom: ${chatRoomId}`
-      );
+  // Handle sending a message
+  socket.on("message", async ({ chatRoomId, senderId, messageBody }) => {
+    console.log(
+      `Message from ${senderId}: ${messageBody} in chatroom: ${chatRoomId}`
+    );
 
-      if (!db) {
+    /* if (!db) {
         console.error("Database is not connected");
         return;
-      }
+      } */
 
-      // Create message object
-      const newMessageContent = {
+    // Create message object
+    /* const newMessageContent = {
         chatId: new ObjectId(chatRoomId),
         senderId: new ObjectId(senderId),
         messageBody: messageBody,
@@ -67,24 +67,24 @@ connectToDb().then(() => {
       await chatsCollection.updateOne(
         { _id: new ObjectId(chatRoomId) },
         { $push: { messages: newMessageContent } }
-      );
+      ); */
 
-      // Emit the message to everyone in the room
-      console.log(`emitting to room: ${chatRoomId}`);
-      console.log(`Socket rooms:`, Array.from(socket.rooms));
-      io.to(chatRoomId).emit("message", {
-        senderId,
-        messageBody,
-      });
-    });
-
-    // Event when a user disconnects
-    socket.on("disconnect", () => {
-      console.log("Client disconnected", socket.id);
+    // Emit the message to everyone in the room
+    console.log(`emitting to room: ${chatRoomId}`);
+    console.log(`Socket rooms:`, Array.from(socket.rooms));
+    io.to(chatRoomId).emit("message", {
+      senderId,
+      messageBody,
     });
   });
 
-  httpServer.listen(4000, () => {
-    console.log("Server is running on http://localhost:4000");
+  // Event when a user disconnects
+  socket.on("disconnect", () => {
+    console.log("Client disconnected", socket.id);
   });
 });
+
+httpServer.listen(4000, () => {
+  console.log("Server is running on http://localhost:4000");
+});
+/* }); */

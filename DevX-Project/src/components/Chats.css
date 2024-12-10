@@ -1,22 +1,16 @@
 .Chats-container {
-  width: 100vw;
-  /* height: calc(100vh - 3rem); */
-  /* height: 100vh; */
-  margin-top: 2rem;
+  height: 100%;
   display: flex;
   flex-direction: row;
-  /* justify-content: center;
-  align-items: center; */
   overflow: hidden;
   color: #3b240b;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .Chats-sidebar-container {
   background-color: #f8f4e1;
-  /* height: 100%; */
   width: 20rem;
-  padding-top: 3rem;
-  padding-left: 1rem;
   padding-right: 1rem;
   display: flex;
   flex-direction: column;
@@ -40,8 +34,6 @@
   width: 100%;
   height: 4rem;
   margin-bottom: 0rem;
-  /* border: 1px #3b240b solid; */
-  /* border-radius: 0.25rem; */
   border-top: 1px solid #af8f6f;
   border-bottom: 1px solid #af8f6f;
   border-left: 1px solid transparent;
@@ -64,11 +56,9 @@
   background-color: #f8f4e1;
   height: 100%;
   width: 100%;
-  padding-top: 3rem;
-  padding-right: 1rem;
-  /* display: flex;
+  display: flex;
   flex-direction: column;
-  align-items: center; */
+  justify-content: space-between;
   input {
     width: 100%;
     margin-left: 0.5rem;
@@ -83,10 +73,7 @@
   }
 }
 .Chats-console-header {
-  /* padding-top: 1rem; */
-  /* height: 5rem; */
   width: 100%;
-  margin-bottom: 1rem;
   background-color: #f8f4e1;
   box-shadow: 0 2px 8px #54331054;
   text-align: center;
@@ -100,14 +87,14 @@
 .Chats-console-messages {
   flex-grow: 1;
   background-color: #f8f4e1;
-  padding-bottom: 3rem;
-  /* height: calc(100vh - 3rem); */
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   height: 60vh;
-  width: 100%;
   display: flex;
   flex-direction: column;
-  /* justify-content: flex-end; */
   overflow-y: auto;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 .Chats-message {
   height: 1.5rem;
@@ -128,7 +115,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  box-shadow: 0 2px 8px #54331054;
+  box-shadow: 0 -2px 8px -2px #54331054;
 }
 .Chats-console-send-button {
   width: 5rem;
@@ -147,9 +134,6 @@
   }
 }
 
-.Chars-console-messages {
-  width: 100%;
-}
 .Chats-message {
   max-width: 100%;
   text-wrap: wrap;
