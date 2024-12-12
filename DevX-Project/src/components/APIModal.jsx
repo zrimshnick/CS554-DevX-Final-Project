@@ -9,17 +9,25 @@ function APIModal(props) {
     const [showModal, setShowModal] = useState(props.isOpen)
     const [loadingState, setLoadingState] = useState(true)
     const [nearbyCafes, setNearbyCafes] = useState([])
-    const { location } = props
-    const { streetAddress, city, state } = location
-    
+
     useEffect(() => {
-        //replace spaces with %20 for the API call
-        async function fetchData() {
-            streetAddress = streetAddress.replace(' ', '%20')
-            city = city.replace(' ', '%20')
-            state = state.replace(' ', '%20')
+        const { userId } = props.id
+        async function getUserLocation(id) {
             try{
-                let {data, loading, error} = await axios.get(`https://api.geoapify.com/v1/geocode/search?apiKey=${VITE_APIKEY}&text=${streetAddress}%20${city}%20${state}`)
+                let {data, loading, error} = await axios.get(`http://localhost:4000/user/id/${id}`)
+                let location = data.location
+                return location
+            }catch(err){
+                console.log(err)
+            }
+        }
+        let {streetAddress, city, state} = getUserLocation(userId)
+        async function fetchData(street, cty, st) {
+            street = street.replace(' ', '%20')
+            cty = cty.replace(' ', '%20')
+            st = st.replace(' ', '%20')
+            try{
+                let {data, loading, error} = await axios.get(`https://api.geoapify.com/v1/geocode/search?apiKey=${VITE_APIKEY}&text=${street}%20${cty}%20${st}`)
                 let {lat, lon} = data.features[0].properties
                 let {data: nearbyData, loading: nearbyLoading} = await axios.get(`https://api.geoapify.com/v2/places?categories=catering.cafe&filter=circle:${lon},${lat},5000&apiKey=${VITE_APIKEY}`)
                 setLoadingState(false)
@@ -29,7 +37,7 @@ function APIModal(props) {
             }
 
         }
-        fetchData()
+        fetchData(streetAddress, city, state)
     },[showModal])
 
 
@@ -42,7 +50,8 @@ function APIModal(props) {
             <div>
                 <ReactModal
                 isOpen={showModal}
-                name="Find Nearby Cafes">
+                name="Find Nearby Cafes"
+                >
                     <h1>Nearby Cafes</h1>
                     <ul>
                         {nearbyCafes.map((cafe, index) => {
@@ -52,7 +61,7 @@ function APIModal(props) {
                             )
                         })}
                     </ul>
-                    <button onClick={() => setShowModal(false)}>Close</button>
+                    <button onClick={() => props.handleClose}>Close</button>
                 </ReactModal>
             </div>
         )

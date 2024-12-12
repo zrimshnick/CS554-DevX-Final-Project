@@ -5,6 +5,7 @@ import "../App.css";
 import "./Chats.css";
 import { useLocation } from "react-router-dom";
 import Chat from "./Chat";
+import APIModal from "./APIModal";
 
 function Chatroom() {
   const { currentUser } = useContext(AuthContext);
@@ -302,6 +303,7 @@ function Chatroom() {
           />
           <button className="Chats-console-send-button">Send</button>
         </form>
+        <APIModal isOpen={showModal} handleClose={toggleModal} id={currentUserId}></APIModal>
       </div>
     </div>
   );
