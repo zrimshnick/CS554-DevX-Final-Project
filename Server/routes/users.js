@@ -94,6 +94,7 @@ router.route("/id/:id").get(async (req, res) => {
 
   try {
     const userFound = await usersData.getUser(req.params.id);
+    console.log(userFound)
     return res.json(userFound);
   } catch (e) {
     return res.status(404).json({ error: e });

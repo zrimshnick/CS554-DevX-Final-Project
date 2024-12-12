@@ -17,6 +17,7 @@ function SignUp() {
   const [lastNameCheck, setLastNameCheck] = useState("");
   /*const [ageCheck, setAgeCheck] = useState(""); */
   const [pwMatch, setPwMatch] = useState("");
+  const [userId, setUserId] = useState(null);  // state to store the MongoDB ObjectId
 
   const handleEmailChange = (e) => {
     console.log("handling email change");
@@ -198,6 +199,7 @@ function SignUp() {
       }
 
       const createdUser = await response.json();
+      setUserId(createdUser._id);
       console.log("User successfully created in MongoDB");
     } catch (e) {
       console.error("Error connecting to MongoDB API:", e);
@@ -205,8 +207,12 @@ function SignUp() {
     }
   };
 
-  if (currentUser) {
-    return <Navigate to="/home" replace={true} />;
+  // if (currentUser) {
+  //   return <Navigate to="/home" replace={true} />;
+  // }
+
+  if (userId) {
+    return <Navigate to={`/complete-profile/${userId}`} />;
   }
 
   return (
