@@ -1,0 +1,80 @@
+.Home {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  }
+  
+  .Home-video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    transition: opacity 1s ease-in-out;
+  }
+  
+  .fade-in {
+    opacity: 1;
+  }
+  
+  .fade-out {
+    opacity: 0;
+  }
+  
+  .Home-content {
+    position: relative;
+    z-index: 1;
+    text-align: center; /* Center text */
+    margin-top: -200px;
+    
+  }
+  
+  .Home-text-container {
+    background-color: rgba(255, 255, 255, 0.6); /* More see-through */
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 100%; /* Adjust width to fit content */
+    margin: 0 auto;
+  }
+  
+  .Home-welcome-message {
+    font-family: 'Pacifico', cursive;
+    font-size: 72px; /* Increase font size */
+    font-weight: bold;
+    color: #000000;
+    white-space: nowrap; /* Prevent text from stacking */
+  }
+  
+  .Home-tagline {
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-size: 50px; /* Adjust font size */
+    font-weight: normal; /* Less bold */
+    color: #000000;
+    margin-top: 10px;
+  }
+  
+  .Home-subtagline {
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-size: 28px; /* Smaller font size */
+    color: #000000;
+    margin-top: 5px;
+  }
+
+  .FriendsList-container {
+    position: absolute;
+    bottom: -250px; /* Position 30px from the bottom of the page */
+    width: 100%; /* Span a little less than the full width of the page */
+    max-width: 1200px; /* Set a maximum width */
+    display: flex;
+    justify-content: flex-start; /* Align items to the left */
+    padding: 0 20px; /* Add padding to ensure it doesn't touch the edges */
+    box-sizing: border-box; /* Include padding in the element's total width and height */
+  }

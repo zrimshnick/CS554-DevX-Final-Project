@@ -7,7 +7,7 @@ import profileIcon from "../img/profileIcon.png";
 function Navigation() {
   return (
     <div className="App-navbar-container">
-      <Link className="App-navbar-title" to="/">
+      <Link className="App-navbar-title" to="/home">
         <img
           className="App-navbar-logo"
           src={logoIcon}
