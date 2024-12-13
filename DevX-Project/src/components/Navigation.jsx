@@ -22,6 +22,9 @@ function Navigation() {
         <Link className="navbarLink" to="/chats">
           Chats
         </Link>
+        <Link className="navbarLink" to="/home">
+          Home
+        </Link>
         <Link className="navbarLink" to="/profile">
           <img
             className="App-navbar-logo"

@@ -207,12 +207,8 @@ function SignUp() {
     }
   };
 
-  // if (currentUser) {
-  //   return <Navigate to="/home" replace={true} />;
-  // }
-
-  if (userId) {
-    return <Navigate to={`/complete-profile/${userId}`} />;
+  if (currentUser) {
+    return <Navigate to="/home" replace={true} />;
   }
 
   return (

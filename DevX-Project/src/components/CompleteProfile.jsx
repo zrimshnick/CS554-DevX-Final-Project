@@ -1,27 +1,33 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
-import { Card, CardContent, TextField, Button, Box, Typography, Select, MenuItem, FormControl, InputLabel, FormHelperText, Checkbox, FormGroup, FormControlLabel } from "@mui/material";
+import React, { useState, useEffect, useContext } from "react";
+import { Card, CardContent, TextField, Button, Box, Typography, Select, CircularProgress, MenuItem, FormControl, InputLabel, FormHelperText, Checkbox, FormGroup, FormControlLabel } from "@mui/material";
 import { AuthContext } from "../context/AuthContext";
 import "../App.css";
 
-// do this formally later
 const checkProfileCompletion = (user) => {
-  return user?.profileComplete;
+  return (user.age != 0 &&
+    user.gender != "" &&
+    user.streetAddress != "" &&
+    user.city != "" &&
+    user.state != "" &&
+    user.preferredGender != [] &&
+    user.preferredAgeMin != 0 &&
+    user.preferredAgeMax != 0
+  )
 };
 
 // profile completion form modal
 const ProfileForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
     bio: "",
-    age: "",
+    age: 0,
     gender: "",
     streetAddress: "",
     city: "",
     state: "",
     profilePicture: null,
     preferredGender: [],
-    preferredAgeMin: "",
-    preferredAgeMax: "",
+    preferredAgeMin: 0,
+    preferredAgeMax: 0,
   });
 
   const [errors, setErrors] = useState({
@@ -36,10 +42,18 @@ const ProfileForm = ({ onSubmit }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    if (name === 'preferredAgeMin' || name === 'preferredAgeMax' || name == 'age') {
+      setFormData({
+        ...formData,
+        [name]: value ? Number(value) : '', // convert to number, or set as empty string if blank
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
+  
 
     setErrors({
       ...errors,
@@ -124,18 +138,27 @@ const ProfileForm = ({ onSubmit }) => {
       isValid = false;
     }
 
-    // validate preferred age range
     if (formData.preferredAgeMin === "" || formData.preferredAgeMax === "") {
       newErrors.preferredAge = "Preferred age range is required.";
       isValid = false;
-    } else if (
-      formData.preferredAgeMin >= formData.preferredAgeMax ||
-      formData.preferredAgeMin < 13 ||
-      formData.preferredAgeMax > 120
-    ) {
-      newErrors.preferredAge = "Preferred age range is invalid.";
-      isValid = false;
+    } else {
+      // ensure preferredAgeMin and preferredAgeMax are between 13 and 120
+      if (formData.preferredAgeMin < 13 || formData.preferredAgeMin > 120) {
+        newErrors.preferredAge = "Preferred age minimum must be between 13 and 120.";
+        isValid = false;
+      }
+      if (formData.preferredAgeMax < 13 || formData.preferredAgeMax > 120) {
+        newErrors.preferredAge = "Preferred age maximum must be between 13 and 120.";
+        isValid = false;
+      }
+  
+      // ensure preferredAgeMax is greater than or equal to preferredAgeMin
+      if (formData.preferredAgeMin >= formData.preferredAgeMax) {
+        newErrors.preferredAge = "Preferred age maximum must be greater than preferred age minimum.";
+        isValid = false;
+      }
     }
+  
 
     setErrors(newErrors);
     return isValid;
@@ -185,7 +208,6 @@ const ProfileForm = ({ onSubmit }) => {
             variant="outlined"
             name="age"
             type="number"
-            value={formData.age}
             onChange={handleInputChange}
             fullWidth
             margin="normal"
@@ -315,27 +337,19 @@ const ProfileForm = ({ onSubmit }) => {
               label="Preferred Age Min"
               variant="outlined"
               name="preferredAgeMin"
-              value={formData.preferredAgeMin}
               onChange={handleInputChange}
               fullWidth
               margin="normal"
               type="number"
-              InputProps={{
-                readOnly: true,
-              }}
             />
             <TextField
               label="Preferred Age Max"
               variant="outlined"
               name="preferredAgeMax"
-              value={formData.preferredAgeMax}
               onChange={handleInputChange}
               fullWidth
               margin="normal"
               type="number"
-              InputProps={{
-                readOnly: true,
-              }}
             />
           </Box>
           {errors.preferredAge && (
@@ -361,60 +375,107 @@ const ProfileForm = ({ onSubmit }) => {
 };
 
 function CompleteProfile (props){
-  const {id: userId} = useParams()
-  const [user, setUser] = useState({
-    profileComplete: false,
-  });
+  const { currentUser } = useContext(AuthContext);
+  const [user, setUser] = useState(null);
   const [showProfileForm, setShowProfileForm] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
-      let currentUser = null;
-      try {
-        const response = await fetch(`http://localhost:3000/user/id/${userId}`, {
-          method: "GET"
-        });
-        if (!response.ok) {
-          const error = await response.json();
-          console.error("Error getting user:", error);
-          alert("Error retrieving user data. Please try again.");
-          return;
+      setIsLoading(true);
+
+      if (currentUser?.email) {
+        try {
+          const response = await fetch(`http://localhost:3000/user/${currentUser.email}`, {
+            method: "GET"
+          });
+          
+          if (!response.ok) {
+            setIsLoading(false);
+            setShowProfileForm(true);
+            return;
+          }
+          
+          const fetchedUser = await response.json();
+          setUser(fetchedUser);
+
+          if (!checkProfileCompletion(fetchedUser)) {
+            setShowProfileForm(true);
+          }
+          
+          setIsLoading(false);
+        } catch (e) {
+          console.error("Error fetching user:", e);
+          setIsLoading(false);
+          setShowProfileForm(true);
         }
-        currentUser = await response.json();
-        setUser(currentUser);
-      } catch (e) {
-        console.error("Error fetching user:", e);
-        alert("Could not connect to the server. Please try again later.");
+      } else {
+        setIsLoading(false);
       }
     };
 
     fetchUser();
-  }, [userId]);
+  }, [currentUser]);
 
-  useEffect(() => {
-    if (!checkProfileCompletion(user)) {
-      setShowProfileForm(true);
+  const handleProfileSubmit = async (newProfileData) => {
+    setIsLoading(true);
+
+    try {
+      const profileDataToSubmit = {
+        ...newProfileData,
+        email: currentUser.email,
+      };
+  
+      const response = await fetch("http://localhost:3000/user/", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profileDataToSubmit),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        console.error("Error creating user in MongoDB:", error);
+        alert("Error saving user data. Please try again.");
+        setIsLoading(false);
+        return;
+      }
+
+      const updatedUser = await response.json();
+      console.log("User successfully updated in MongoDB");
+      
+      setUser(updatedUser);
+      setShowProfileForm(false);
+      setIsLoading(false);
+    } catch (e) {
+      console.error("Error connecting to MongoDB API:", e);
+      alert("Could not connect to the server. Please try again later.");
+      setIsLoading(false);
     }
-  }, [user]);
-
-  const handleProfileSubmit = (newProfileData) => {
-    console.log("Submitting new profile data:", newProfileData);
-    setUser((prevUser) => ({
-      ...prevUser,
-      profileComplete: true,
-    }));
-    setShowProfileForm(false);
   };
 
-  return (
-    <div className="Home">
-      <h1>Welcome back!</h1>
-
-      {showProfileForm && (
-        <ProfileForm onSubmit={handleProfileSubmit} />
-      )}
-    </div>
-  );
+  if (isLoading) {
+    return (
+      <Box 
+        display="flex" 
+        justifyContent="center" 
+        alignItems="center" 
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+  else {
+    return (
+      <div className="Home">
+        <h1 className="welcome">Welcome back!</h1>
+  
+        {showProfileForm && (
+          <ProfileForm onSubmit={handleProfileSubmit} />
+        )}
+      </div>
+    );
+  }
 }
 
 export default CompleteProfile;

@@ -50,12 +50,78 @@ router
         /* age,
         bio */
       );
+      console.log(userCreated)
 
       return res.json(userCreated);
     } catch (e) {
       return res.status(500).json({ error: e });
     }
+  })
+  .patch(async (req, res) => {
+    const updatedData = req.body;
+  
+    if (!updatedData || Object.keys(updatedData).length === 0) {
+      return res.status(400).json({ error: "Request body must have fields to update" });
+    }
+  
+    // Input validation
+    // try {
+    //   if (updatedUser.firstName) {
+    //     updatedUser.firstName = validation.checkAge(updatedUser.firstName);
+    //   }
+    //   if (updatedUser.lastName) {
+    //     updatedUser.lastName = validation.checkAge(updatedUser.lastName);
+    //   }
+    //   if (updatedUser.email) {
+    //     updatedUser.email = validation.checkAge(updatedUser.email); 
+    //   }
+    //   if (updatedUser.bio) {
+    //     updatedUser.bio = validation.checkAge(updatedUser.bio);
+    //   }
+    //   if (updatedUser.age) {
+    //     updatedUser.age = validation.checkAge(updatedUser.age);
+    //   }
+    //   if (updatedUser.gender) {
+    //     formData.gender = validation.checkName(updatedUser.gender);
+    //   }
+    //   if (updatedUser.streetAddress) {
+    //     formData.streetAddress = validation.checkName(formData.streetAddress);
+    //   }
+    //   if (updatedUser.city) {
+    //     updatedUser.city = validation.checkName(updatedUser.city);
+    //   }
+    //   if (updatedUser.state) {
+    //     updatedUser.state = validation.checkName(updatedUser.state);
+    //   }
+    //   if (updatedUser.preferredGender) {
+    //     if (!Array.isArray(updatedUser.preferredGender)) {
+    //       throw new Error("Preferred gender should be an array");
+    //     }
+    //     updatedUser.preferredGender = validation.checkName(updatedUser.preferredGender);
+    //   }
+    //   if (formData.preferredAgeMin) {
+    //     formData.preferredAgeMin = validation.checkAge(formData.preferredAgeMin);
+    //   }
+    //   if (formData.preferredAgeMax) {
+    //     formData.preferredAgeMax = validation.checkAge(formData.preferredAgeMax);
+    //   }
+    // } catch (e) {
+    //   return res.status(400).json({ error: e.message });
+    // }
+  
+    try {
+      const updatedUser = await usersData.updateUserByEmail(req.body.email, updatedData);
+  
+      if (!updatedUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
+  
+      return res.json(updatedUser);
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
   });
+  
 
 /* router.route("/:id").get(async (req, res) => {
   try {

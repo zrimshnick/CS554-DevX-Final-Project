@@ -1,30 +1,55 @@
 // Home.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import CompleteProfileForm from "./CompleteProfile";
+import { AuthContext } from "../context/AuthContext";
 
 function Home(props) {
   const [profile, setProfile] = useState(null); 
   const [openProfileModal, setOpenProfileModal] = useState(false);
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
-    // Mock fetching user profile and determining if it is incomplete
-    const fetchedProfile = {
-      age: "",
-      gender: "",
-      streetAddress: "",
-      city: "",
-      state: "",
-      bio: "",
-      profilePicture: null,
+    const fetchUser = async () => {
+      try {
+        if (!profile) {return}
+
+        const response = await fetch(`http://localhost:3000/user/${currentUser.email}`, {
+          method: "GET"
+        });
+        if (!response.ok) {
+          const error = await response.json();
+          console.error("Error getting user:", error);
+          alert("Error retrieving user data. Please try again.");
+          return;
+        }
+        const updatedUser = await response.json();
+        console.log(updatedUser)
+        setProfile(updatedUser);
+      } catch (e) {
+        console.error("Error fetching user:", e);
+        alert("Could not connect to the server. Please try again later.");
+      }
     };
 
-    setProfile(fetchedProfile);
+    fetchUser();
+  }, [currentUser]);
 
-    // check if the profile is incomplete
-    if (!fetchedProfile.age || !fetchedProfile.gender || !fetchedProfile.streetAddress) {
-      setOpenProfileModal(true);
+  useEffect(() => {
+    if (profile) {
+      if (
+        profile.age == 0 ||
+        profile.gender == "" ||
+        profile.streetAddress == "" ||
+        profile.city == "" ||
+        profile.state == "" ||
+        profile.preferredGender == [] ||
+        profile.preferredAgeMin == 0 ||
+        profile.preferredAgeMax == 0
+      ) {
+        setOpenProfileModal(true);
+      }
     }
-  }, []);
+  }, [profile]);
 
   const handleProfileComplete = (updatedProfile) => {
     setProfile(updatedProfile);
@@ -34,7 +59,6 @@ function Home(props) {
 
   return (
     <div>
-      <h1>Welcome to the Home Page</h1>
       <CompleteProfileForm
         open={openProfileModal}
         onProfileComplete={handleProfileComplete}

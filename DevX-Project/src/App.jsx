@@ -42,10 +42,6 @@ function App() {
             <Route path="/explore" element={<PrivateRoute />}>
               <Route path="/explore" element={<Explore />}></Route>
             </Route>
-
-            <Route path="/complete-profile/:id" element={<PrivateRoute />}>
-              <Route path="" element={<CompleteProfile />}></Route>
-            </Route>
           </Routes>
         </div>
       </div>
