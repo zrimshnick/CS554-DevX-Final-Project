@@ -22,16 +22,17 @@ const s3Client = new S3Client({
   }
 });
 
+// Credit: AWS Setup Manual
 app.get('/generate-presigned-url', async (req, res) => {
   console.log("generating link")
   const command = new PutObjectCommand({
-    Bucket: "devx2024",  // Replace with your bucket name
-    Key: req.query.filename,  // The name of the file you want to upload
-    ContentType: "image/jpeg",  // Adjust depending on the file type
+    Bucket: "devx2024",
+    Key: req.query.filename,
+    ContentType: "image/jpeg",
   });
 
   try {
-    const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });  // Expires in 1 hour
+    const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
     console.log(signedUrl)
     res.send({ signedUrl })
   } catch (error) {
