@@ -21,8 +21,15 @@ export const createUser = async (
     firstName: firstName,
     lastName: lastName,
     email: email,
-    /* age: age,
-    bio: bio, */
+    bio: "",
+    age: 0,
+    streetAddress: "",
+    city: "",
+    state: "",
+    profilePicture: null,
+    preferredGender: [],
+    preferredAgeMin: 0,
+    preferredAgeMax: 0,
     chats: [],
     openChatPartners: [],
   };
@@ -86,4 +93,24 @@ export const getUserByEmail = async (email) => {
   user._id = user._id.toString();
 
   return user;
+};
+
+export const updateUserByEmail = async (email, updatedData) => {
+  try {
+    if (!updatedData || Object.keys(updatedData).length === 0) {
+      throw new Error('No fields to update.');
+    }
+
+    const usersCollection = await users();
+    const response = await usersCollection.updateOne(
+      { email },
+      { $set: updatedData }
+    );
+
+    const updatedUser = await usersCollection.findOne({ email });
+    return updatedUser;
+  } catch (e) {
+    console.error('Error updating user:', e);
+    throw new Error('Database update failed.');
+  }
 };
