@@ -13,7 +13,7 @@ function Chatroom() {
     message: "",
     name: currentUser.displayName,
   });
-  // const test = useRef();
+  const test = useRef();
   const [chat, setChat] = useState([]);
   const [openChats, setOpenChats] = useState([]);
   const [chatRoomId, setChatRoomId] = useState(null);
