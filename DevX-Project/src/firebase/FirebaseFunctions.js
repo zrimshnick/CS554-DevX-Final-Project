@@ -36,7 +36,8 @@ async function doSocialSignIn() {
   const auth = getAuth();
   let socialProvider = new GoogleAuthProvider();
   /* await signInWithPopup(auth, socialProvider); */
-
+  console.log(auth);
+  console.log(socialProvider);
   try {
     // Sign in with Firebase
     const result = await signInWithPopup(auth, socialProvider);
