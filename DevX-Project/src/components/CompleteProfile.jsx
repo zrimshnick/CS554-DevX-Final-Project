@@ -9,6 +9,7 @@ const checkProfileCompletion = (user) => {
     user.streetAddress != "" &&
     user.city != "" &&
     user.state != "" &&
+    user.postalCode != 0 &&
     user.preferredGender != [] &&
     user.preferredAgeMin != 0 &&
     user.preferredAgeMax != 0
@@ -24,6 +25,7 @@ const ProfileForm = ({ onSubmit }) => {
     streetAddress: "",
     city: "",
     state: "",
+    postalCode: 0,
     profilePicture: null,
     preferredGender: [],
     preferredAgeMin: 0,
@@ -36,6 +38,7 @@ const ProfileForm = ({ onSubmit }) => {
     streetAddress: "",
     city: "",
     state: "",
+    postalCode: "",
     preferredGender: "",
     preferredAge: "",
   });
@@ -98,6 +101,7 @@ const ProfileForm = ({ onSubmit }) => {
       streetAddress: "",
       city: "",
       state: "",
+      postalCode: "",
       preferredGender: "",
       preferredAge: "",
     };
@@ -132,6 +136,10 @@ const ProfileForm = ({ onSubmit }) => {
       isValid = false;
     }
 
+    if(!formData.postalCode || formData.postalCode < 10000 || formData.postalCode > 99999){
+      newErrors.postalCode = "Postal code must be a 5-digit number.";
+      isValid = false;
+    }
     // validate preferred gender(s)
     if (formData.preferredGender.length === 0) {
       newErrors.preferredGender = "Preferred gender(s) are required.";
@@ -267,6 +275,16 @@ const ProfileForm = ({ onSubmit }) => {
             margin="normal"
             error={Boolean(errors.state)}
             helperText={errors.state}
+          />
+
+          <TextField
+            label="Postal Code"
+            variant="outlined"
+            name="postalCode"
+            onChange={handleInputChange}
+            fullWidth
+            margin="normal"
+            type="number"
           />
 
           <Button
