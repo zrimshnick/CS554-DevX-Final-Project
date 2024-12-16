@@ -8,7 +8,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "https://18.119.19.95:4000",
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
     credentials: true,
@@ -85,6 +85,6 @@ io.on("connection", (socket) => {
 });
 
 httpServer.listen(4000, () => {
-  console.log("Server is running on http://localhost:4000");
+  console.log("Server is running on https://18.119.19.95:4000");
 });
 /* }); */
