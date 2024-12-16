@@ -10,7 +10,7 @@ import configRoutes from "./routes/index.js";
 
 app.use(
   cors({
-    origin: "https://cs-554-dev-x-final-project.vercel.app/",
+    origin: "https://cs-554-dev-x-final-project.vercel.app/" || "https://cs-554-dev-x-final-project-git-hosting-swesnowmans-projects.vercel.app/",
   })
 );
 
