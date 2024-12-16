@@ -16,7 +16,7 @@ function Home(props) {
   useEffect(() => {
       const fetchUser = async () => {
         try {
-          const response = await fetch(`http://localhost:3000/user/${currentUser.email}`, {
+          const response = await fetch(`http://18.222.71.218:3000/user/${currentUser.email}`, {
             method: "GET"
           });
           if (!response.ok) {

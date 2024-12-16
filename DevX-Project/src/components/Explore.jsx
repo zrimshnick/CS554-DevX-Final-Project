@@ -13,7 +13,7 @@ function Explore() {
   const getAllUsers = async (e) => {
     /* get all users they can select from */
     try {
-      const response = await fetch(`http://localhost:3000/user`, {
+      const response = await fetch(`http://18.222.71.218:3000/user`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -42,7 +42,7 @@ function Explore() {
   const handleCreateChat = async (otherUserEmail) => {
     try {
       const currentUserResponse = await fetch(
-        `http://localhost:3000/user/${currentUser.email}`,
+        `http://18.222.71.218:3000/user/${currentUser.email}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -56,7 +56,7 @@ function Explore() {
       const currentUserData = await currentUserResponse.json();
 
       const otherUserResponse = await fetch(
-        `http://localhost:3000/user/${otherUserEmail}`,
+        `http://18.222.71.218:3000/user/${otherUserEmail}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -70,7 +70,7 @@ function Explore() {
       const otherUserData = await otherUserResponse.json();
 
       // Create a new chat
-      const chatResponse = await fetch(`http://localhost:3000/chat`, {
+      const chatResponse = await fetch(`http://18.222.71.218:3000/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

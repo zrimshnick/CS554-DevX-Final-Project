@@ -45,7 +45,7 @@ function Chatroom() {
   const socketRef = useRef();
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:4000");
+    socketRef.current = io("http://18.119.19.95:4000");
     return () => {
       socketRef.current.disconnect();
     };
@@ -71,7 +71,7 @@ function Chatroom() {
   const fetchOpenChats = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/user/${currentUser.email}`,
+        `http://18.222.71.218:3000/user/${currentUser.email}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -102,7 +102,7 @@ function Chatroom() {
   const getCurrentUserId = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/user/${currentUser.email}`,
+        `http://18.222.71.218:3000/user/${currentUser.email}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -126,7 +126,7 @@ function Chatroom() {
   const getChatPartnerDetails = async (partnerId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/user/id/${partnerId}`,
+        `http://18.222.71.218:3000/user/id/${partnerId}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -170,7 +170,7 @@ function Chatroom() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/chat/${currentUserId}/${partnerId}`,
+        `http://18.222.71.218:3000/chat/${currentUserId}/${partnerId}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -220,7 +220,7 @@ function Chatroom() {
     /* MONGO CALL */
     try {
       const response = await fetch(
-        `http://localhost:3000/chat/${chatRoomId}/add-messages`,
+        `http://18.222.71.218:3000/chat/${chatRoomId}/add-messages`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

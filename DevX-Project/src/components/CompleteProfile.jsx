@@ -528,7 +528,7 @@ function CompleteProfile ({onSubmit}){
 
       if (currentUser?.email) {
         try {
-          const response = await fetch(`http://localhost:3000/user/${currentUser.email}`, {
+          const response = await fetch(`http://18.222.71.218:3000/user/${currentUser.email}`, {
             method: "GET"
           });
           
@@ -590,7 +590,7 @@ function CompleteProfile ({onSubmit}){
 
       console.log(formData)
   
-      const response = await fetch("http://localhost:3000/user/", {
+      const response = await fetch("http://18.222.71.218:3000/user/", {
         method: "PATCH",
         body: formData,
       });

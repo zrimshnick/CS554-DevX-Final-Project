@@ -12,7 +12,7 @@ const FriendsList = () => {
       try {
         const friendsData = await Promise.all(
           friendIds.map(async (id) => {
-            const response = await fetch(`http://localhost:3000/user/id/${id}`);
+            const response = await fetch(`http://18.222.71.218:3000/user/id/${id}`);
             const data = await response.json();
             return data;
           })
@@ -26,7 +26,7 @@ const FriendsList = () => {
     const fetchUserData = async () => {
       if (currentUser) {
         try {
-          const response = await fetch(`http://localhost:3000/user/${currentUser.email}`);
+          const response = await fetch(`http://18.222.71.218:3000/user/${currentUser.email}`);
           const data = await response.json();
           fetchFriendsData(data.openChatPartners);
         } catch (error) {

@@ -53,7 +53,7 @@ async function doSocialSignIn() {
 
     // Create MongoDB user
     try {
-      const response = await fetch("http://localhost:3000/user/", {
+      const response = await fetch("http://18.222.71.218:3000/user/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),

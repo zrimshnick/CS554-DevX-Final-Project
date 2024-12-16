@@ -8,7 +8,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "https://18.119.19.95:4000",
+    origin: "https://cs-554-dev-x-final-project.vercel.app/",
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
     credentials: true,

@@ -69,7 +69,7 @@ router
     if (profilePictureFile) {
       console.log("setting pfp");
       const presignedUrlResponse = await fetch(
-        `http://localhost:3000/generate-presigned-url?filename=${updatedData.email}&filetype=jpeg`
+        `http://18.222.71.218:3000/generate-presigned-url?filename=${updatedData.email}&filetype=jpeg`
       );
       if (presignedUrlResponse.ok) {
         try {

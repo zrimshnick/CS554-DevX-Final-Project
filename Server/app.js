@@ -10,7 +10,7 @@ import configRoutes from "./routes/index.js";
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://cs-554-dev-x-final-project.vercel.app/",
   })
 );
 
@@ -57,5 +57,5 @@ configRoutes(app);
 
 app.listen(3000, () => {
   console.log("We've got an express server");
-  console.log("Your routes will be running on http://localhost:3000\n");
+  console.log("Your routes will be running on http://18.222.71.218:3000\n");
 });
