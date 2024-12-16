@@ -20,10 +20,14 @@ function Chatroom() {
   const [currentUserId, setCurrentUserId] = useState(null);
   const [activePartnerId, setActivePartnerId] = useState(null);
   const [partnersDetails, setPartnersDetails] = useState({});
+  const [showModal, setShowModal] = useState(false);
   const messagesEndRef = useRef(null);
 
   const location = useLocation();
 
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
   useEffect(() => {
     if (location.pathname === "/chats") {
       document.body.style.overflow = "hidden";
@@ -298,6 +302,7 @@ function Chatroom() {
           />
           <button className="Chats-console-send-button">Send</button>
         </form>
+        <APIModal isOpen={showModal} handleClose={toggleModal} id={currentUserId}></APIModal>
       </div>
     </div>
   );
