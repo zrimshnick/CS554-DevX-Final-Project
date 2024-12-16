@@ -10,7 +10,17 @@ import configRoutes from "./routes/index.js";
 
 app.use(
   cors({
-    origin: "http://localhost:5173" || "https://cs-554-dev-x-final-project.vercel.app/",
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "https://cs-554-dev-x-final-project.vercel.app",
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
   })
 );
 

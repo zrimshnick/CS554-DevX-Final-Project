@@ -8,7 +8,17 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5173",
+      origin: (origin, callback) => {
+        const allowedOrigins = [
+          "http://localhost:5173",
+          "https://cs-554-dev-x-final-project.vercel.app",
+        ];
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
     credentials: true,
