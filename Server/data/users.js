@@ -26,6 +26,7 @@ export const createUser = async (
     streetAddress: "",
     city: "",
     state: "",
+    zip: "",
     profilePicture: null,
     preferredGender: [],
     preferredAgeMin: 0,

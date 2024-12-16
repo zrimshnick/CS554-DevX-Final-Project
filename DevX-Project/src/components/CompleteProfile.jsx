@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Card, CardContent, TextField, Button, Box, Typography, Select, CircularProgress, MenuItem, FormControl, InputLabel, FormHelperText, Checkbox, FormGroup, FormControlLabel } from "@mui/material";
 import { AuthContext } from "../context/AuthContext";
 import "../App.css";
+import axios from 'axios';
 
 const checkProfileCompletion = (user) => {
   return (user.age != 0 &&
@@ -9,6 +10,7 @@ const checkProfileCompletion = (user) => {
     user.streetAddress != "" &&
     user.city != "" &&
     user.state != "" &&
+    user.zip != "" &&
     user.preferredGender != [] &&
     user.preferredAgeMin != 0 &&
     user.preferredAgeMax != 0
@@ -24,6 +26,7 @@ const ProfileForm = ({ onSubmit }) => {
     streetAddress: "",
     city: "",
     state: "",
+    zip: "",
     profilePicture: null,
     preferredGender: [],
     preferredAgeMin: 0,
@@ -36,29 +39,119 @@ const ProfileForm = ({ onSubmit }) => {
     streetAddress: "",
     city: "",
     state: "",
+    zip: "",
     preferredGender: "",
     preferredAge: "",
   });
 
+  const [isAddressVerified, setIsAddressVerified] = useState(false);
+  const [isVerifyingAddress, setIsVerifyingAddress] = useState(false);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'preferredAgeMin' || name === 'preferredAgeMax' || name == 'age') {
-      setFormData({
-        ...formData,
-        [name]: value ? Number(value) : '', // convert to number, or set as empty string if blank
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    }
-  
+    let newFormData = { ...formData };
+    let newErrors = { ...errors };
 
-    setErrors({
-      ...errors,
-      [name]: "",
-    });
+    // Validation Logic
+    switch (name) {
+      case "age":
+        const age = value ? Number(value) : "";
+        newFormData.age = age;
+        if (age === "" || (age >= 13 && age <= 120)) {
+          newErrors.age = "";
+        } else {
+          newErrors.age = "Age must be between 13 and 120.";
+        }
+        break;
+
+      case "gender":
+        newFormData.gender = value;
+        if (value) {
+          newErrors.gender = "";
+        } else {
+          newErrors.gender = "Gender is required.";
+        }
+        break;
+
+      case "streetAddress":
+        newFormData.streetAddress = value;
+        if (value.trim()) {
+          newErrors.streetAddress = "";
+        } else {
+          newErrors.streetAddress = "Street address is required.";
+        }
+        setIsAddressVerified(false);
+        break;
+
+      case "city":
+        newFormData.city = value;
+        if (value.trim()) {
+          newErrors.city = "";
+        } else {
+          newErrors.city = "City is required.";
+        }
+        setIsAddressVerified(false);
+        break;
+
+      case "state":
+        newFormData.state = value
+        if (value.trim() && value.length === 2) {
+          newErrors.state = "";
+        } else {
+          newErrors.state = "State code must be two characters.";
+        }
+        setIsAddressVerified(false);
+        break;
+
+      case "zip":
+        newFormData.zip = value
+        if (value.trim() === "" || (value.length === 5)) {
+          newErrors.zip = "";
+        } else {
+          newErrors.zip = "Zip code must be 5 digits.";
+        }
+        setIsAddressVerified(false);
+        break;
+
+      case "preferredAgeMin":
+        const minAge = value ? Number(value) : "";
+        newFormData.preferredAgeMin = minAge;
+        if (minAge === "" || (minAge >= 13 && minAge <= 120)) {
+          if (formData.age && minAge < formData.age - 5) {
+            newErrors.preferredAge = "Min age must be within 5 years of your age.";
+          } else if (formData.preferredAgeMax && minAge > formData.preferredAgeMax) {
+            newErrors.preferredAge = "Min age cannot be greater than max age."
+          } else {
+            newErrors.preferredAge = "";
+          }
+        } else {
+            newErrors.preferredAge = "Min age must be between 13 and 120.";
+        }
+        break;
+
+      case "preferredAgeMax":
+        const maxAge = value ? Number(value) : "";
+        newFormData.preferredAgeMax = maxAge;
+        if (maxAge === "" || (maxAge >= 13 && maxAge <= 120)) {
+          if (formData.age && maxAge > formData.age + 5) {
+            newErrors.preferredAge = "Max age must be within 5 years of your age.";
+          } else if (formData.preferredAgeMin && maxAge < formData.preferredAgeMin) {
+            newErrors.preferredAge = "Max age cannot be less than min age.";
+          } else {
+
+            newErrors.preferredAge = "";
+          }
+        } else {
+            newErrors.preferredAge = "Max age must be between 13 and 120.";
+        }
+        break;
+
+      default:
+        newFormData[name] = value;
+    }
+
+    setFormData(newFormData);
+    setErrors(newErrors);
   };
 
   const handleFileChange = (e) => {
@@ -84,105 +177,124 @@ const ProfileForm = ({ onSubmit }) => {
     });
   };
 
-  const calculatePreferredAgeRange = (age) => {
-    let minAge = age - 5 > 13 ? age - 5 : 13; // min age (age - 5, but not less than 13)
-    let maxAge = age + 5 < 120 ? age + 5 : 120; // max age (age + 5, but not greater than 120)
-    return { minAge, maxAge };
+  const handleCheckAddress = async () => {
+    setIsVerifyingAddress(true);
+    let newErrors = { ...errors };
+    const config = {
+      headers: {
+        Authorization: 'prj_live_pk_82edad404bea8ca5b2cccdf98595df5b2d9cbd67',
+      },
+      params: {
+        countryCode: 'US',
+        stateCode: formData.state,
+        city: formData.city,
+        postalCode: formData.zip,
+        addressLabel: formData.streetAddress
+      }
+    };
+
+    try {
+      const response = await axios.get('https://api.radar.io/v1/addresses/validate', config);
+      console.log('Response:', response.data);
+      if (response.data.result.verificationStatus === 'verified') {
+        setIsAddressVerified(true);
+        newErrors.streetAddress = "";
+        newErrors.city = "";
+        newErrors.state = "";
+        newErrors.zip = "";
+      } else {
+        setIsAddressVerified(false);
+        newErrors.streetAddress = "Invalid address";
+        newErrors.city = "Invalid address";
+        newErrors.state = "Invalid address";
+        newErrors.zip = "Invalid address";
+      }
+    } catch (error) {
+      console.error('Error:', error.response ? error.response.data : error.message);
+      setIsAddressVerified(false);
+      newErrors.streetAddress = "Error checking address";
+      newErrors.city = "Error checking address";
+      newErrors.state = "Error checking address";
+      newErrors.zip = "Error checking address";
+    } finally {
+      setIsVerifyingAddress(false);
+      setErrors(newErrors);
+    }
   };
 
-  const validateForm = () => {
-    let isValid = true;
-    let newErrors = {
-      age: "",
-      gender: "",
-      streetAddress: "",
-      city: "",
-      state: "",
-      preferredGender: "",
-      preferredAge: "",
-    };
-    
-    // validate age (13-120)
-    if (!formData.age || formData.age < 13 || formData.age > 120) {
-      newErrors.age = "Age must be between 13 and 120.";
-      isValid = false;
-    }
-
-    // validate gender
-    if (!formData.gender) {
-      newErrors.gender = "Gender is required.";
-      isValid = false;
-    }
-
-    // validate street address
-    if (!formData.streetAddress.trim()) {
-      newErrors.streetAddress = "Street address is required.";
-      isValid = false;
-    }
-
-    // validate city
-    if (!formData.city.trim()) {
-      newErrors.city = "City is required.";
-      isValid = false;
-    }
-
-    // validate state
-    if (!formData.state.trim()) {
-      newErrors.state = "State is required.";
-      isValid = false;
-    }
-
-    // validate preferred gender(s)
+  const validatePreferredGenders = () => {
     if (formData.preferredGender.length === 0) {
-      newErrors.preferredGender = "Preferred gender(s) are required.";
-      isValid = false;
+      setErrors({
+        ...errors,
+        preferredGender: "Preferred gender(s) are required."
+      });
+      return false;
     }
+    return true;
+  };
 
-    if (formData.preferredAgeMin === "" || formData.preferredAgeMax === "") {
-      newErrors.preferredAge = "Preferred age range is required.";
-      isValid = false;
+  const validatePreferredAgeRange = () => {
+    if (formData.preferredAgeMin === "" || (formData.preferredAgeMin >= 13 && formData.preferredAgeMin <= 120)) {
+      if (formData.age && (formData.preferredAgeMin < formData.age - 5)) {
+        setErrors({
+          ...errors,
+          preferredAge: "Min age must be within 5 years of your age."
+        });
+        return false;
+      } else if (formData.preferredAgeMax && (formData.preferredAgeMin > formData.preferredAgeMax)) {
+        setErrors({
+          ...errors,
+          preferredAge: "Min age cannot be greater than max age."
+        });
+        return false;
+      } else {
+        setErrors({
+          ...errors,
+          preferredAge: ""
+        });
+      }
     } else {
-      // ensure preferredAgeMin and preferredAgeMax are between 13 and 120
-      if (formData.preferredAgeMin < 13 || formData.preferredAgeMin > 120) {
-        newErrors.preferredAge = "Preferred age minimum must be between 13 and 120.";
-        isValid = false;
-      }
-      if (formData.preferredAgeMax < 13 || formData.preferredAgeMax > 120) {
-        newErrors.preferredAge = "Preferred age maximum must be between 13 and 120.";
-        isValid = false;
-      }
-  
-      // ensure preferredAgeMax is greater than or equal to preferredAgeMin
-      if (formData.preferredAgeMin >= formData.preferredAgeMax) {
-        newErrors.preferredAge = "Preferred age maximum must be greater than preferred age minimum.";
-        isValid = false;
-      }
+      setErrors({
+        ...errors,
+        preferredAge: "Min age must be between 13 and 120."
+      });
+      return false;
     }
-  
-
-    setErrors(newErrors);
-    return isValid;
+    if (formData.preferredAgeMax === "" || (formData.preferredAgeMax >= 13 && formData.preferredAgeMax <= 120)) {
+      if (formData.age && (formData.preferredAgeMax > formData.age + 5)) {
+        setErrors({
+          ...errors,
+          preferredAge: "Max age must be within 5 years of your age."
+        });
+        return false;
+      } else if (formData.preferredAgeMin && (formData.preferredAgeMin > formData.preferredAgeMax)) {
+        setErrors({
+          ...errors,
+          preferredAge: "Min age cannot be greater than max age."
+        });
+        return false;
+      } else {
+        setErrors({
+          ...errors,
+          preferredAge: ""
+        });;
+      }
+    } else {
+      setErrors({
+        ...errors,
+        preferredAge: "Max age must be between 13 and 120."
+      });
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (validateForm()) {
-      console.log("first")
+    if (isAddressVerified && validatePreferredGenders() && validatePreferredAgeRange() && Object.values(errors).every(error => error === "")) {
       onSubmit(formData);
     }
   };
-
-  useEffect(() => {
-    if (formData.age) {
-      const { minAge, maxAge } = calculatePreferredAgeRange(formData.age);
-      setFormData((prevData) => ({
-        ...prevData,
-        preferredAgeMin: minAge,
-        preferredAgeMax: maxAge,
-      }));
-    }
-  }, [formData.age]);
 
   return (
     <Card sx={{ width: 500, margin: "auto", padding: 2 }}>
@@ -259,7 +371,7 @@ const ProfileForm = ({ onSubmit }) => {
           />
 
           <TextField
-            label="State"
+            label="State Code"
             variant="outlined"
             name="state"
             value={formData.state}
@@ -270,14 +382,42 @@ const ProfileForm = ({ onSubmit }) => {
             helperText={errors.state}
           />
 
+          <TextField
+            label="Zip Code"
+            variant="outlined"
+            name="zip"
+            type="number"
+            value={formData.zip}
+            onChange={handleInputChange}
+            fullWidth
+            margin="normal"
+            error={Boolean(errors.zip)}
+            helperText={errors.zip}
+          />
+          <Box display="flex" justifyContent="center" marginTop={2}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleCheckAddress}
+              disabled={isVerifyingAddress}
+            >
+              {isVerifyingAddress ? "Checking..." : "Check Address"}
+            </Button>
+          </Box>
+          {isAddressVerified && (
+            <Typography color="success" variant="body2" align="center" sx={{ mt: 1 }}>
+              Address Verified!
+            </Typography>
+          )}
+
           <Button
             variant="contained"
             component="label"
             fullWidth
             margin="normal"
-            sx={{ marginBottom: 2 }}
+            sx={{ marginTop: 2, marginBottom: 2 }}
           >
-            Upload Profile Picture
+            Upload Profile Picture (Optional)
             <input
               type="file"
               hidden
@@ -343,6 +483,8 @@ const ProfileForm = ({ onSubmit }) => {
               fullWidth
               margin="normal"
               type="number"
+              error={Boolean(errors.preferredAge)}
+              helperText={errors.preferredAge}
             />
             <TextField
               label="Preferred Age Max"
@@ -352,13 +494,10 @@ const ProfileForm = ({ onSubmit }) => {
               fullWidth
               margin="normal"
               type="number"
+              error={Boolean(errors.preferredAge)}
+              helperText={errors.preferredAge}
             />
           </Box>
-          {errors.preferredAge && (
-            <Typography color="error" variant="body2">
-              {errors.preferredAge}
-            </Typography>
-          )}
 
           <Box display="flex" justifyContent="center" marginTop={3}>
             <Button
@@ -366,6 +505,7 @@ const ProfileForm = ({ onSubmit }) => {
               color="primary"
               type="submit"
               sx={{ marginRight: 2 }}
+              disabled={!isAddressVerified || Object.values(errors).some(error => error !== "")}
             >
               Submit
             </Button>

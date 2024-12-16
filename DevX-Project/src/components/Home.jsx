@@ -86,7 +86,7 @@ function Home(props) {
       <div className="Home">
           {openProfileModal ? (
             <div className="profile-form-container">
-              <h1 className="welcome">Welcome back!</h1>
+              <h1 className="welcome">Welcome!</h1>
               <CompleteProfileForm
                 open={openProfileModal}
                 onSubmit={handleProfileComplete}
