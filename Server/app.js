@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const app = express();
 import configRoutes from "./routes/index.js";
@@ -12,7 +14,43 @@ app.use(
   })
 );
 
+const s3Client = new S3Client({
+  region: 'us-east-2',
+  credentials: {
+    accessKeyId: 'AKIATTSKFO4EXBR56V4X', 
+    secretAccessKey: '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'
+  }
+});
+
+app.get('/generate-presigned-url', async (req, res) => {
+  console.log("generating link")
+  const command = new PutObjectCommand({
+    Bucket: "devx2024",  // Replace with your bucket name
+    Key: req.query.filename,  // The name of the file you want to upload
+    ContentType: "image/jpeg",  // Adjust depending on the file type
+  });
+
+  try {
+    const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });  // Expires in 1 hour
+    console.log(signedUrl)
+    res.send({ signedUrl })
+  } catch (error) {
+    console.error("Error generating pre-signed URL", error);
+  }
+
+});
+
 app.use(express.json());
+
+app.get('/generate-presigned-url', (req, res) => {
+  const params = {
+    Bucket: 'devx2024',
+    Key: `${updatedData.email}`, 
+    Expires: 60,
+    ContentType: req.query.filetype, 
+    ACL: 'public-read', 
+  };
+});
 
 configRoutes(app);
 

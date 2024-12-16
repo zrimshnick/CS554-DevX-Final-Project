@@ -176,6 +176,7 @@ const ProfileForm = ({ onSubmit }) => {
     e.preventDefault();
 
     if (validateForm()) {
+      console.log("first")
       onSubmit(formData);
     }
   };
@@ -299,6 +300,7 @@ const ProfileForm = ({ onSubmit }) => {
               type="file"
               hidden
               name="profilePicture"
+              accept=".jpg,.jpeg"
               onChange={handleFileChange}
             />
           </Button>
@@ -392,7 +394,7 @@ const ProfileForm = ({ onSubmit }) => {
   );
 };
 
-function CompleteProfile (props){
+function CompleteProfile ({onSubmit}){
   const { currentUser } = useContext(AuthContext);
   const [user, setUser] = useState(null);
   const [showProfileForm, setShowProfileForm] = useState(false);
@@ -439,15 +441,36 @@ function CompleteProfile (props){
     setIsLoading(true);
 
     try {
-      const profileDataToSubmit = {
-        ...newProfileData,
-        email: currentUser.email,
-      };
+      const formData = new FormData();
+      formData.append("email", currentUser.email);
+
+      for (const key in newProfileData) {
+        if (key !== "profilePicture") {
+          if (Array.isArray(newProfileData[key])) {
+            newProfileData[key].forEach((item) =>
+              formData.append(`${key}[]`, item)
+            );
+          } else if (
+            key === "age" ||
+            key === "preferredAgeMin" ||
+            key === "preferredAgeMax"
+          ) {
+            formData.append(key, Number(newProfileData[key])); // Convert to number
+          } else {
+            formData.append(key, newProfileData[key]);
+          }
+        }
+      }
+
+      if (newProfileData.profilePicture) {
+        formData.append("profilePicture", newProfileData.profilePicture);
+      }
+
+      console.log(formData)
   
       const response = await fetch("http://localhost:3000/user/", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(profileDataToSubmit),
+        body: formData,
       });
 
       if (!response.ok) {
@@ -464,6 +487,7 @@ function CompleteProfile (props){
       setUser(updatedUser);
       setShowProfileForm(false);
       setIsLoading(false);
+      onSubmit(updatedUser)
     } catch (e) {
       console.error("Error connecting to MongoDB API:", e);
       alert("Could not connect to the server. Please try again later.");
@@ -486,8 +510,6 @@ function CompleteProfile (props){
   else {
     return (
       <div className="Home">
-        <h1 className="welcome">Welcome back!</h1>
-  
         {showProfileForm && (
           <ProfileForm onSubmit={handleProfileSubmit} />
         )}
