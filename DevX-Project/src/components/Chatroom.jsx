@@ -5,6 +5,8 @@ import "../App.css";
 import "./Chats.css";
 import { useLocation } from "react-router-dom";
 import Chat from "./Chat";
+import APIModal from "./APIModal";
+import Button from '@mui/material/Button';
 
 function Chatroom() {
   const { currentUser } = useContext(AuthContext);
@@ -27,18 +29,19 @@ function Chatroom() {
 
   const toggleModal = () => {
     setShowModal(!showModal);
+    //hello
   };
-  useEffect(() => {
-    if (location.pathname === "/chats") {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+  // useEffect(() => {
+  //   if (location.pathname === "/chats") {
+  //     document.body.style.overflow = "hidden";
+  //   } else {
+  //     document.body.style.overflow = "auto";
+  //   }
 
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [location.pathname]);
+  //   return () => {
+  //     document.body.style.overflow = "auto";
+  //   };
+  // }, [location.pathname]);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -255,6 +258,7 @@ function Chatroom() {
   }, []);
 
   return (
+    <>
     <div className="Chats-container">
       <div className="Chats-sidebar-container">
         <div className="Chats-sidebar-header">Chats</div>
@@ -302,9 +306,15 @@ function Chatroom() {
           />
           <button className="Chats-console-send-button">Send</button>
         </form>
-        <APIModal isOpen={showModal} handleClose={toggleModal} id={currentUserId}></APIModal>
       </div>
+
     </div>
+    <div className="APIModal-container">
+      <APIModal email={currentUser.email} />
+    </div>
+
+    
+    </>
   );
 }
 
