@@ -10,7 +10,7 @@ import configRoutes from "./routes/index.js";
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:5173" || "https://cs-554-dev-x-final-project.vercel.app/",
   })
 );
 
