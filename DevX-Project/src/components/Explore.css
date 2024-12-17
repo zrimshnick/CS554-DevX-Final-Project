@@ -1,3 +1,127 @@
 .Explore-Container {
-  margin-top: 6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden; 
+  background-color: #faebd7;
+}
+
+.Explore-header {
+  font-size: 2em;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #282c34;
+}
+
+.Explore-subheader {
+  font-size: 1em;
+  margin-bottom: 20px;
+  color: #282c34;
+}
+
+.Explore-card-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 550px;
+  overflow: visible;
+  position: relative;
+  margin-top: 10px;
+}
+
+.Explore-card {
+    position: absolute;
+    margin: 0 auto; 
+    width: 350px;
+    height: 500px;
+    background-color: #fff;
+    border-radius: 20px;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    color: #282c34;
+    overflow: hidden;
+    left: 50%; 
+    transform: translateX(-50%); 
+}
+
+.swipe {
+  position: absolute;
+}
+
+.Explore-card-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0)); 
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    color: white;
+    padding: 10px;
+}
+
+.Explore-card-title {
+  padding: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.Explore-card-title h3 {
+  margin: 0;
+}
+
+.Explore-card-info {
+  padding: 10px;
+}
+
+.Explore-card-info p {
+  margin: 2px 0;
+  font-size: 0.9em;
+  color: white;
+}
+
+.Explore-card-info .bio {
+  font-style: italic;
+}
+
+.Explore-no-profile-picture {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #282c34;
+  font-size: 0.9em;
+  padding: 10px;
+}
+
+.Explore-no-users {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px; 
+}
+
+.Explore-no-users-button {
+  padding: 15px 25px;
+  font-size: 1em;
+  color: #282c34;
+  background-color: white; 
+  border: none;
+  border-radius: 20px; 
+  cursor: pointer;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-weight: bold; 
+  line-height: 1.5; 
+}
+
+.Explore-no-users-button:hover {
+  background-color: white;
 }

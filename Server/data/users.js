@@ -31,6 +31,7 @@ export const createUser = async (
     preferredGender: [],
     preferredAgeMin: 0,
     preferredAgeMax: 0,
+    swiped: [],
     chats: [],
     openChatPartners: [],
   };
@@ -101,6 +102,7 @@ export const updateUserByEmail = async (email, updatedData) => {
     if (!updatedData || Object.keys(updatedData).length === 0) {
       throw new Error('No fields to update.');
     }
+    console.log(updatedData)
 
     const usersCollection = await users();
     const response = await usersCollection.updateOne(
@@ -115,3 +117,23 @@ export const updateUserByEmail = async (email, updatedData) => {
     throw new Error('Database update failed.');
   }
 };
+
+export const getAllEligibleMatches = async (email) => {
+  console.log("here")
+  try {
+    const user = await getUserByEmail(email);
+    const allUsers = await getAllUsers();
+    let eligibleMatches = allUsers.filter(otherUser => otherUser.zip === user.zip);
+    if (eligibleMatches.length === 0) { // loosen the constraints
+       eligibleMatches = allUsers.filter(otherUser => otherUser.city === user.city);
+    }
+    eligibleMatches = eligibleMatches.filter(otherUser => { return !user.swiped.some((swipe) => swipe.email === otherUser.email); }); // do not show previously swiped users
+    eligibleMatches = eligibleMatches.filter(otherUser => { return user.preferredGender.includes(otherUser.gender); }); // enforce gender pref
+    eligibleMatches = eligibleMatches.filter(otherUser => { return otherUser.age >= user.preferredAgeMin && otherUser.age <= user.preferredAgeMax }); // enforce age range pref
+    return eligibleMatches;
+  }
+  catch (e) {
+    console.error('Error fetching eligible matches:', e);
+    throw new Error('Fetching eligible matches from DB failed.');
+  }
+}
