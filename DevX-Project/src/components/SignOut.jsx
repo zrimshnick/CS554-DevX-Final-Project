@@ -1,11 +1,16 @@
 import React from "react";
+import {Button} from "@mui/material"
 import { doSignOut } from "../firebase/FirebaseFunctions";
 
 const SignOutButton = () => {
   return (
-    <button className="Auth-signOutButton" type="button" onClick={doSignOut}>
+    <Button
+      type="button"
+      onClick={doSignOut}
+      variant="contained"
+    >
       Sign Out
-    </button>
+    </Button>
   );
 };
 

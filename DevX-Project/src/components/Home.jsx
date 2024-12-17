@@ -76,9 +76,16 @@ function Home(props) {
   }
 
 
-  if (!currentUser) {
+  if (!currentUser && !profile) {
     return (
-      <div>Loading...</div>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
     );
   }
   else if (profile){

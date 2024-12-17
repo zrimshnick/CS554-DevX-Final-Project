@@ -198,6 +198,10 @@ const ProfileForm = ({ onSubmit }) => {
       console.log('Response:', response.data);
       if (response.data.result.verificationStatus === 'verified') {
         setIsAddressVerified(true);
+        formData.streetAddress = response.data.address.addressLabel;
+        formData.city = response.data.address.city;
+        formData.state = response.data.address.stateCode;
+        formData.zip = response.data.address.postalCode;
         newErrors.streetAddress = "";
         newErrors.city = "";
         newErrors.state = "";
@@ -641,3 +645,4 @@ function CompleteProfile ({onSubmit}){
 }
 
 export default CompleteProfile;
+export {ProfileForm};

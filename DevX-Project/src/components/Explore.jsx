@@ -11,8 +11,40 @@ function Explore() {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(null);
   const cardRefs = useRef([]);
+  const [canAccessExplore, setCanAccessExplore] = useState(false);
 
   useEffect(() => {
+    const checkUserData = async () => {
+      if (currentUser?.email) {
+        try {
+          const response = await fetch(
+            `http://localhost:3000/user/${currentUser.email}`,
+            {
+              method: "GET",
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+
+          if (!response.ok) {
+            const error = await response.json();
+            console.error("Error fetching user data", error);
+            return;
+          }
+
+          const userData = await response.json();
+
+          // Check if swiped array is empty
+          if (!userData.age || userData.age === 0) {
+            setCanAccessExplore(false);
+          } else {
+            setCanAccessExplore(true);
+          }
+        } catch (e) {
+          console.error("Error connecting to MongoDB API:", e);
+          alert("Could not connect to the server. Please try again later.");
+        }
+      }
+    };
     const getAllUsers = async (e) => {
       // get all users they can select from
       if (currentUser?.email) {
@@ -47,8 +79,12 @@ function Explore() {
       }
     };
 
-    getAllUsers();
-  }, [currentUser]);
+    checkUserData();
+    if (canAccessExplore) {
+      getAllUsers();
+    }
+
+  }, [currentUser, canAccessExplore]);
 
   const handleChatNav = () => {
     navigate('/chats');
