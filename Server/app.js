@@ -53,15 +53,15 @@ app.get('/generate-presigned-url', async (req, res) => {
 
 app.use(express.json());
 
-app.get('/generate-presigned-url', (req, res) => {
-  const params = {
-    Bucket: 'devx2024',
-    Key: `${updatedData.email}`, 
-    Expires: 60,
-    ContentType: req.query.filetype, 
-    ACL: 'public-read', 
-  };
-});
+// app.get('/generate-presigned-url', (req, res) => {
+//   const params = {
+//     Bucket: 'devx2024',
+//     Key: `${updatedData.email}`, 
+//     Expires: 60,
+//     ContentType: req.query.filetype, 
+//     ACL: 'public-read', 
+//   };
+// });
 
 configRoutes(app);
 

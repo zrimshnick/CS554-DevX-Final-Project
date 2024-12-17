@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb";
 import { generateUsername } from "unique-username-generator";
 import * as validation from "../validation.js";
 import multer from 'multer'
+import { users } from "../config/mongoCollections.js";
 const upload = multer({ storage: multer.memoryStorage() });
 
 router
@@ -98,9 +99,9 @@ router
   
     // update the user in mongo
     try {
-      updatedData.age = Number(updatedData.age)
-      updatedData.preferredAgeMin = Number(updatedData.preferredAgeMin)
-      updatedData.preferredAgeMax = Number(updatedData.preferredAgeMax)
+      if (updatedData.age) {updatedData.age = Number(updatedData.age)}
+      if (updatedData.preferredAgeMin) {updatedData.preferredAgeMin = Number(updatedData.preferredAgeMin)}
+      if (updatedData.preferredAgeMax) {updatedData.preferredAgeMax = Number(updatedData.preferredAgeMax)}
       const updatedUser = await usersData.updateUserByEmail(
         updatedData.email,
         updatedData
@@ -114,22 +115,6 @@ router
       return res.status(500).json({ error: "Failed to update user" });
     }
   });
-  
-
-/* router.route("/:id").get(async (req, res) => {
-  try {
-    req.params.id = validation.checkId(req.params.id);
-  } catch (e) {
-    return res.status(400).json({ error: e });
-  }
-
-  try {
-    const userFound = await usersData.getUser(req.params.id);
-    return res.json(userFound);
-  } catch (e) {
-    return res.status(404).json({ error: e });
-  }
-}); */
 router.route("/:email").get(async (req, res) => {
   try {
     req.params.email = validation.checkEmail(req.params.email);
@@ -157,6 +142,22 @@ router.route("/id/:id").get(async (req, res) => {
     return res.json(userFound);
   } catch (e) {
     return res.status(404).json({ error: e });
+  }
+});
+router.route("/explore/:email").get(async (req, res) => {
+  try {
+    req.params.email = validation.checkEmail(req.params.email);
+  }
+  catch (e) {
+    return res.status(400).json({error: e});
+  }
+
+  try {
+    const eligibleMatches = await usersData.getAllEligibleMatches(req.params.email);
+    return res.json(eligibleMatches);
+  }
+  catch (e) {
+    return res.status(404).json({error: e});
   }
 });
 
