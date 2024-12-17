@@ -1,71 +1,165 @@
-import React, { useState, useEffect } from "react";
-import "../App.css";
-import "./Profile.css";
-import { Route, Link, Routes, useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import {
+  Card,
+  CardContent,
+  Button,
+  Box,
+  Typography,
+  Avatar,
+  CircularProgress,
+  Modal,
+} from "@mui/material";
+import { AuthContext } from "../context/AuthContext";
+import defaultProfileIcon from "../img/default-profileIcon.png"; 
+import ChangePassword from "./ChangePassword"; 
 import axios from "axios";
-import profileIcon from "../img/default-profileIcon.png";
+import "./Profile.css";
 import SignOutButton from "./SignOut";
-import ChangePassword from "./ChangePassword";
 
-function Profile(props) {
-  /* const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState(undefined);
-  const { id } = useParams();
-  //const id = "6734f5821a6c894ffc4eea07";
+const Profile = () => {
+  const { currentUser } = useContext(AuthContext);
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false); 
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchUserData = async () => {
       try {
-        setLoading(true);
-        const { data } = await axios.get(`http://localhost:3000/user/${id}`);
-
-        if (!data) {
-          return false;
-        }
-
-        setUserData(data);
-        setLoading(false);
-      } catch (e) {
-        console.log(e);
+        const response = await axios.get(
+          `http://localhost:3000/user/${currentUser.email}`
+        );
+        setUser(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
-    fetchData();
-  }, []);
+    fetchUserData();
+  }, [currentUser]);
 
-  if (loading) {
+  if (isLoading) {
     return (
-      <div>
-        <div className="loadingText">Loading...</div>
-      </div>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
     );
-  } else {
-    return (
-      <div className="Profile">
-        <div className="Profile-left-container">
-          <div className="Profile-left-photo-container">
-            <img className="Profile-left-photo" src={profileIcon} />
-          </div>
-          <a className="Profile-left-button">Edit Profile / DM</a>
-          <SignOutButton />
-        </div>
-        <div className="Profile-right-container">
-          <div className="Profile-right-username">{userData.username}</div>
-          <div className="Profile-right-name">
-            {userData.firstName} {userData.lastName}
-          </div>
-          <div className="Profile-right-bio">{userData.bio}</div>
-        </div>
-      </div>
-    );
-  } */
+  }
 
   return (
-    <div className="Profile">
-      <div>Profile Page</div>
-      <SignOutButton />
-      <ChangePassword />
-    </div>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "flex-start",
+        padding: 3,
+      }}
+      className={"background-box"}
+    >
+      <Card sx={{ width: "60%", maxWidth: 800 }}>
+        <CardContent>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 3,
+            }}
+          >
+            <Avatar
+              src={user.profilePicture || defaultProfileIcon}
+              alt="Profile Picture"
+              sx={{ width: 100, height: 100 }}
+            />
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-end",
+                gap: 1, 
+              }}
+            >
+              <button type="button">
+                {/* onClick={openEditProfile} */}
+                Edit Profile
+              </button>
+              <SignOutButton></SignOutButton>
+            </Box>
+          </Box>
+
+          {/* Profile Information */}
+          <Typography variant="h5" gutterBottom>
+            {user.firstName} {user.lastName}
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            <strong>Email:</strong> {user.email}
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            <strong>Age:</strong> {user.age}
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            <strong>Bio:</strong> {user.bio || "No bio provided."}
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            <strong>Gender:</strong> {user.gender}
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            <strong>Preferred Gender(s):</strong>{" "}
+            {user.preferredGender.join(", ")}
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            <strong>Address:</strong>{" "}
+            {`${user.streetAddress}, ${user.city}, ${user.state}, ${user.zip}`}
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            <strong>Preferred Age Range:</strong>{" "}
+            {`${user.preferredAgeMin} - ${user.preferredAgeMax}`}
+          </Typography>
+          <Box sx={{ marginTop: 4, textAlign: "center" }}>
+            <button type="button" onClick={() => setIsChangePasswordOpen(true)}>
+              Change Password
+            </button>
+          </Box>
+        </CardContent>
+      </Card>
+
+      <Modal
+        open={isChangePasswordOpen}
+        onClose={() => setIsChangePasswordOpen(false)}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Box
+          sx={{
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          <ChangePassword email={currentUser.email} />
+          <Box sx={{ marginTop: 2, textAlign: "center" }}>
+            <button
+              type="button"
+              onClick={() => setIsChangePasswordOpen(false)}
+            >
+              Cancel
+            </button>
+          </Box>
+        </Box>
+      </Modal>
+    </Box>
   );
-}
+};
 
 export default Profile;
