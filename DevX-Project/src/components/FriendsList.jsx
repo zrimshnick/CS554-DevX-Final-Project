@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Grid, Avatar, Typography, Paper, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+const API_LOCAL = "https://localhost:3000/"
+
 
 const FriendsList = () => {
   const { currentUser } = useContext(AuthContext);
@@ -12,7 +14,7 @@ const FriendsList = () => {
       try {
         const friendsData = await Promise.all(
           friendIds.map(async (id) => {
-            const response = await fetch(`http://localhost:3000/user/id/${id}`);
+            const response = await fetch(`${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/id/${id}`);
             const data = await response.json();
             return data;
           })
@@ -26,7 +28,7 @@ const FriendsList = () => {
     const fetchUserData = async () => {
       if (currentUser) {
         try {
-          const response = await fetch(`http://localhost:3000/user/${currentUser.email}`);
+          const response = await fetch(`${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/${currentUser.email}`);
           const data = await response.json();
           fetchFriendsData(data.openChatPartners);
         } catch (error) {

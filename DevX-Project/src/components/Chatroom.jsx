@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import Chat from "./Chat";
 import APIModal from "./APIModal";
 import Button from '@mui/material/Button';
+const API_LOCAL = "https://localhost:3000"
 
 function Chatroom() {
   const { currentUser } = useContext(AuthContext);
@@ -78,7 +79,7 @@ function Chatroom() {
   const fetchOpenChats = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/user/${currentUser.email}`,
+        `${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/${currentUser.email}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -109,7 +110,7 @@ function Chatroom() {
   const getCurrentUserId = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/user/${currentUser.email}`,
+        `${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/${currentUser.email}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -133,7 +134,7 @@ function Chatroom() {
   const getChatPartnerDetails = async (partnerId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/user/id/${partnerId}`,
+        `${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/id/${partnerId}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -177,7 +178,7 @@ function Chatroom() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/chat/${currentUserId}/${partnerId}`,
+        `${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/chat/${currentUserId}/${partnerId}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -227,7 +228,7 @@ function Chatroom() {
     /* MONGO CALL */
     try {
       const response = await fetch(
-        `http://localhost:3000/chat/${chatRoomId}/add-messages`,
+        `${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/chat/${chatRoomId}/add-messages`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

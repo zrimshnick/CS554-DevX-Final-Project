@@ -16,7 +16,7 @@ import axios from "axios";
 import "./Profile.css";
 import SignOutButton from "./SignOut";
 import {ProfileForm} from "./CompleteProfile";
-
+const API_LOCAL = "https://localhost:3000"
 
 const Profile = () => {
   const { currentUser } = useContext(AuthContext);
@@ -29,7 +29,7 @@ const Profile = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/user/${currentUser.email}`
+          `${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/${currentUser.email}`
         );
         setUser(response.data);
       } catch (error) {
@@ -72,7 +72,7 @@ const Profile = () => {
 
       console.log(formData)
   
-      const response = await fetch("http://localhost:3000/user/", {
+      const response = await fetch(`${import.meta.env.HEROKU_SERVER || API_LOCAL}/user/`, {
         method: "PATCH",
         body: formData,
       });

@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { Grid, Typography, Paper, Box } from '@mui/material';
 import './APIModal.css'
 // import { Link } from 'react-router-dom';
+const API_LOCAL = "https://localhost:3000"
+
 
 
 function APIModal(props) {
@@ -31,7 +33,7 @@ function APIModal(props) {
         {
             const VITE_APIKEY = import.meta.env.VITE_APIKEY;
 
-            let {data, loading, error} = await axios.get(`http://localhost:3000/user/${userEmail}`)
+            let {data, loading, error} = await axios.get(`${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/${userEmail}`)
             let {streetAddress, city, state} = data
             streetAddress = streetAddress.replace(' ', '%20')
             city = city.replace(' ', '%20')

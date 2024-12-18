@@ -12,11 +12,14 @@ function Home(props) {
   const [openProfileModal, setOpenProfileModal] = useState(false);
   const [rerender, setReRender] = useState(false);
   const videoUrl = 'https://devx2024.s3.amazonaws.com/CoffeeFinal.mp4';
+  const API_LOCAL = "https://localhost:3000"
+
 
   useEffect(() => {
       const fetchUser = async () => {
         try {
-          const response = await fetch(`http://localhost:3000/user/${currentUser.email}`, {
+          console.log(import.meta.env.HEROKU_SERVER)
+          const response = await fetch(`${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/${currentUser.email}`, {
             method: "GET"
           });
           if (!response.ok) {

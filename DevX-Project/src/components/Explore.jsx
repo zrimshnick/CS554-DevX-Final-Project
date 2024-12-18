@@ -4,6 +4,7 @@ import "./Explore.css";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import TinderCard from "react-tinder-card";
+const API_LOCAL = "https://localhost:3000"
 
 function Explore() {
   const { currentUser } = useContext(AuthContext);
@@ -18,7 +19,7 @@ function Explore() {
       if (currentUser?.email) {
         try {
           const response = await fetch(
-            `http://localhost:3000/user/${currentUser.email}`,
+            `${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/${currentUser.email}`,
             {
               method: "GET",
               headers: { "Content-Type": "application/json" },
@@ -49,7 +50,7 @@ function Explore() {
       // get all users they can select from
       if (currentUser?.email) {
         try {
-          const response = await fetch(`http://localhost:3000/user/explore/${currentUser.email}`, {
+          const response = await fetch(`${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/explore/${currentUser.email}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
           });
@@ -103,7 +104,7 @@ function Explore() {
   const updateSwipedArray = async (direction, swipedUserEmail) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/user/${currentUser.email}`,
+        `${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/${currentUser.email}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -123,7 +124,7 @@ function Explore() {
         swiped: userData.swiped
       }
       const response2 = await fetch(
-        `http://localhost:3000/user`,
+        `${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -146,7 +147,7 @@ function Explore() {
   const checkForMatch = async (otherUserEmail, updatedCurrentUser) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/user/${otherUserEmail}`,
+        `${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/${otherUserEmail}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -186,7 +187,7 @@ function Explore() {
     console.log("creating chat")
     try {
       const currentUserResponse = await fetch(
-        `http://localhost:3000/user/${currentUser.email}`,
+        `${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/${currentUser.email}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -200,7 +201,7 @@ function Explore() {
       const currentUserData = await currentUserResponse.json();
 
       const otherUserResponse = await fetch(
-        `http://localhost:3000/user/${otherUserEmail}`,
+        `${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/${otherUserEmail}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -214,7 +215,7 @@ function Explore() {
       const otherUserData = await otherUserResponse.json();
 
       // Create a new chat
-      const chatResponse = await fetch(`http://localhost:3000/chat`, {
+      const chatResponse = await fetch(`${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

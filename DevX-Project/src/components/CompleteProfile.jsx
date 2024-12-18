@@ -4,6 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import "../App.css";
 import axios from 'axios';
 import DOMPurify from 'dompurify'
+const API_LOCAL = "https://localhost:3000"
 
 const checkProfileCompletion = (user) => {
   return (user.age != 0 &&
@@ -533,7 +534,7 @@ function CompleteProfile ({onSubmit}){
 
       if (currentUser?.email) {
         try {
-          const response = await fetch(`http://localhost:3000/user/${currentUser.email}`, {
+          const response = await fetch(`${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/${currentUser.email}`, {
             method: "GET"
           });
           
@@ -595,7 +596,7 @@ function CompleteProfile ({onSubmit}){
 
       console.log(formData)
   
-      const response = await fetch("http://localhost:3000/user/", {
+      const response = await fetch(`${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/`, {
         method: "PATCH",
         body: formData,
       });

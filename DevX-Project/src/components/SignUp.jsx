@@ -5,6 +5,7 @@ import { doCreateUserWithEmailAndPassword } from "../firebase/FirebaseFunctions"
 import "./Auth.css";
 import { generateUsername } from "unique-username-generator";
 import DOMPurify from 'dompurify'
+const API_LOCAL = "https://localhost:3000"
 
 import SocialSignIn from "./SocialSignIn";
 
@@ -197,7 +198,8 @@ function SignUp() {
 
     try {
       console.log("POSTING user")
-      const response = await fetch("http://localhost:3000/user/", {
+      console.log(import.meta.env.HEROKU_SERVER)
+      const response = await fetch(`${import.meta.env.HEROKU_SERVER || API_LOCAL}/user/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
