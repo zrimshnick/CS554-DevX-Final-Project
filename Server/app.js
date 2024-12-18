@@ -65,7 +65,7 @@ app.use(express.json());
 
 configRoutes(app);
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log("We've got an express server");
   console.log("Your routes will be running on http://localhost:3000\n");
 });
