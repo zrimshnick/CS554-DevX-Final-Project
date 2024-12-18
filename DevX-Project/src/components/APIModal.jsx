@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { Grid, Typography, Paper, Box } from '@mui/material';
+import './APIModal.css'
 // import { Link } from 'react-router-dom';
 
 
@@ -59,26 +60,45 @@ function APIModal(props) {
         )
     }else{
         return (
-            <div >
-            <Paper sx={{ padding: 2, borderRadius: 2, width: '95%', display:"flex", flexDirection:"column", justifyContent:"center", alignItems: "center" }}>
-                <Typography variant="h6" gutterBottom>
+            <div className='nearby-cafes-container'>
+            <Paper className='nearby-cafes-paper' sx={{ padding: 2, borderRadius: 2, width: '95%', display:"flex", flexDirection:"column", justifyContent:"center", alignItems: "center" }}>
+                <Typography variant="h6" gutterBottom className="nearby-cafes-title">
                 Nearby Cafes
                 </Typography>
-                <Grid container spacing={2} justifyContent="center" sx={{width: "fit-content"}}>
+                <Grid container spacing={2} justifyContent="center" className="nearby-cafes-grid">
                 {nearbyCafes.map((cafe, index) => (
-                    <Grid item key={index} xs={4} sm={3} md={2} sx={{border: 1, borderColor: "black", borderRadius: "6px", padding:"0px", display: "flex", alignItems: "center"}}>
+                    <Grid item key={index} xs={12} sm={6} md={4} lg={3} className="cafe-item">
                     <Box sx={{ textAlign: 'center' }}>
-                        <Typography variant="body2" align="center" sx={{ marginTop: 1 }}>
-                            {cafe.properties.name.slice(0,4) == "https" ? (
-                            <a href={cafe.properties.website}>{cafe.properties.name}</a>
-                            ) : (
-                                <a href={"https://" + cafe.properties.website}>{cafe.properties.name}</a>
-                            )}
+                        <Typography className="cafe-name" variant="body2" align="center" sx={{ marginTop: 1 }}>
+                        {cafe.properties.website && (
+                        cafe.properties.website.slice(0,5) === "https" ? (
+                        <a
+                            href={cafe.properties.website}
+                            className="cafe-link"
+                        >
+                            {cafe.properties.name}
+                        </a>
+                        ) : cafe.properties.website.slice(0,7) === "http://" ? (
+                        <a
+                            href={`https://${cafe.properties.website.slice(7)}`}
+                            className="cafe-link"
+                        >
+                            {cafe.properties.name}
+                        </a>
+                        ) : (
+                        <a
+                            href={`https://${cafe.properties.website}`}
+                            className="cafe-link"
+                        >
+                            {cafe.properties.name}
+                        </a>
+                        )
+                        )}
                         </Typography>
-                        <Typography variant="body2" align="center" sx={{ marginTop: 1 }}>
+                        <Typography className="cafe-address" variant="body2" align="center" sx={{ marginTop: 1 }}>
                         {cafe.properties.address_line2}
                         </Typography>
-                        <Typography variant="body2" align="center" sx={{ marginTop: 1 }}>
+                        <Typography className="cafe-hours" variant="body2" align="center" sx={{ marginTop: 1 }}>
                         {cafe.properties.opening_hours}
                         </Typography>
                     </Box>

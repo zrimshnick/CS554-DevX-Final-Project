@@ -183,7 +183,7 @@ const ProfileForm = ({ onSubmit }) => {
     let newErrors = { ...errors };
     const config = {
       headers: {
-        Authorization: 'prj_live_pk_82edad404bea8ca5b2cccdf98595df5b2d9cbd67',
+        Authorization: import.meta.env.VITE_ADDRESS_APIKEY,
       },
       params: {
         countryCode: 'US',

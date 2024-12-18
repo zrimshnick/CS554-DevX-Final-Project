@@ -264,7 +264,11 @@ function Explore() {
             >
               <div className="Explore-card-content">
                 <div className="Explore-card-title">
-                  <h3>{user.name || user.email}</h3>
+                  <h3>
+                    {user.firstName && user.lastName
+                    ? `${user.firstName} ${user.lastName}`
+                    : user.email}
+                  </h3>
                 </div>
                 <div className="Explore-card-info">
                   {user.age && <p>Age: {user.age}</p>}
