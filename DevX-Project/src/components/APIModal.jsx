@@ -66,7 +66,7 @@ function APIModal(props) {
                 </Typography>
                 <Grid container spacing={2} justifyContent="center" sx={{width: "fit-content"}}>
                 {nearbyCafes.map((cafe, index) => (
-                    <Grid item key={index} xs={4} sm={3} md={2} sx={{border: 1, borderColor: "black", borderRadius: "6px"}}>
+                    <Grid item key={index} xs={4} sm={3} md={2} sx={{border: 1, borderColor: "black", borderRadius: "6px", padding:"0px", display: "flex", alignItems: "center"}}>
                     <Box sx={{ textAlign: 'center' }}>
                         <Typography variant="body2" align="center" sx={{ marginTop: 1 }}>
                             {cafe.properties.name.slice(0,4) == "https" ? (
