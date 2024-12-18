@@ -1,6 +1,8 @@
 import React from 'react'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
+import { Grid, Typography, Paper, Box } from '@mui/material';
+// import { Link } from 'react-router-dom';
 
 
 function APIModal(props) {
@@ -57,17 +59,33 @@ function APIModal(props) {
         )
     }else{
         return (
-            <div>
-            <h1>Nearby Cafes</h1>
-            <ul>
+            <div >
+            <Paper sx={{ padding: 2, borderRadius: 2, width: '95%', display:"flex", flexDirection:"column", justifyContent:"center", alignItems: "center" }}>
+                <Typography variant="h6" gutterBottom>
+                Nearby Cafes
+                </Typography>
+                <Grid container spacing={2} justifyContent="center" sx={{width: "fit-content"}}>
                 {nearbyCafes.map((cafe, index) => (
-                    <li key={index}>
-                        <h4><a href={cafe.properties.website}>{cafe.properties?.name || 'Unnamed Cafe'}</a></h4>
-                        <h5> {cafe.properties.opening_hours}</h5>
-                        <h5> {cafe.properties.address_line2}</h5>
-                    </li>
+                    <Grid item key={index} xs={4} sm={3} md={2} sx={{border: 1, borderColor: "black", borderRadius: "6px"}}>
+                    <Box sx={{ textAlign: 'center' }}>
+                        <Typography variant="body2" align="center" sx={{ marginTop: 1 }}>
+                            {cafe.properties.name.slice(0,4) == "https" ? (
+                            <a href={cafe.properties.website}>{cafe.properties.name}</a>
+                            ) : (
+                                <a href={"https://" + cafe.properties.website}>{cafe.properties.name}</a>
+                            )}
+                        </Typography>
+                        <Typography variant="body2" align="center" sx={{ marginTop: 1 }}>
+                        {cafe.properties.address_line2}
+                        </Typography>
+                        <Typography variant="body2" align="center" sx={{ marginTop: 1 }}>
+                        {cafe.properties.opening_hours}
+                        </Typography>
+                    </Box>
+                    </Grid>
                 ))}
-            </ul>
+                </Grid>
+            </Paper>
         </div>
         )
     }

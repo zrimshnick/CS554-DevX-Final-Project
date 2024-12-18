@@ -23,6 +23,8 @@ darkest-brown: #3b240b
 
 body {
   margin: 0;
+  width: 100%;
+  overflow-x:hidden;
 }
 
 a {
