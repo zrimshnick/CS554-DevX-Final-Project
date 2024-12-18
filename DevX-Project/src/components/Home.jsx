@@ -38,6 +38,7 @@ function Home(props) {
   }, [currentUser]);
 
   useEffect(() => {
+    console.log("profile state changed")
     if (profile) {
       if (
         profile.age == 0 ||

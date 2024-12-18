@@ -3,6 +3,7 @@ import { Card, CardContent, TextField, Button, Box, Typography, Select, Circular
 import { AuthContext } from "../context/AuthContext";
 import "../App.css";
 import axios from 'axios';
+import DOMPurify from 'dompurify'
 
 const checkProfileCompletion = (user) => {
   return (user.age != 0 &&
@@ -583,7 +584,7 @@ function CompleteProfile ({onSubmit}){
           ) {
             formData.append(key, Number(newProfileData[key])); // Convert to number
           } else {
-            formData.append(key, newProfileData[key]);
+            formData.append(key, DOMPurify.sanitize(newProfileData[key])); // check for XSS
           }
         }
       }

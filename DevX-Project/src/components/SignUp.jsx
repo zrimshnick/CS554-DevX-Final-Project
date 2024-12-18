@@ -1,9 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { doCreateUserWithEmailAndPassword } from "../firebase/FirebaseFunctions";
 import "./Auth.css";
 import { generateUsername } from "unique-username-generator";
+import DOMPurify from 'dompurify'
 
 import SocialSignIn from "./SocialSignIn";
 
@@ -18,6 +19,8 @@ function SignUp() {
   /*const [ageCheck, setAgeCheck] = useState(""); */
   const [pwMatch, setPwMatch] = useState("");
   const [userId, setUserId] = useState(null);  // state to store the MongoDB ObjectId
+
+  const signUpStarted = useRef(false);
 
   const handleEmailChange = (e) => {
     console.log("handling email change");
@@ -52,6 +55,13 @@ function SignUp() {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+
+    if (signUpStarted.current) {
+      return;
+    }
+
+    signUpStarted.current = true; 
+
     /* let { email, passwordOne, passwordTwo, firstName, lastName, age } =
       e.target.elements; */
     let { email, passwordOne, passwordTwo, firstName, lastName } =
@@ -70,7 +80,7 @@ function SignUp() {
     /*setAgeCheck(""); */
 
     /* EMAIL */
-    email.value = email.value?.trim();
+    email.value = email.value?.trim().toLowerCase();
     if (!email.value) {
       errors.email = "Email cannot be empty";
     } else if (
@@ -162,6 +172,7 @@ function SignUp() {
     /*setAgeCheck(errors.age || ""); */
 
     if (Object.keys(errors).length > 0) {
+      signUpStarted.current = false;
       return false;
     }
 
@@ -177,14 +188,15 @@ function SignUp() {
 
     /* CREATE IN MONGODB */
     const userData = {
-      firstName: firstName.value.trim(),
-      lastName: lastName.value.trim(),
-      email: email.value.trim(),
+      firstName: DOMPurify.sanitize(firstName.value.trim()), // check for XSS
+      lastName: DOMPurify.sanitize(lastName.value.trim()),
+      email: DOMPurify.sanitize(email.value.trim()),
       /* age: parseInt(age.value.trim(), 10),
       bio: "", */ // You can collect the bio in the form if needed.
     };
 
     try {
+      console.log("POSTING user")
       const response = await fetch("http://localhost:3000/user/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -204,6 +216,8 @@ function SignUp() {
     } catch (e) {
       console.error("Error connecting to MongoDB API:", e);
       alert("Could not connect to the server. Please try again later.");
+    } finally {
+      signUpStarted.current = false;
     }
   };
 
