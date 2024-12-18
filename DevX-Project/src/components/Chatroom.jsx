@@ -5,6 +5,8 @@ import "../App.css";
 import "./Chats.css";
 import { useLocation } from "react-router-dom";
 import Chat from "./Chat";
+import APIModal from "./APIModal";
+import Button from '@mui/material/Button';
 
 function Chatroom() {
   const { currentUser } = useContext(AuthContext);
@@ -20,21 +22,26 @@ function Chatroom() {
   const [currentUserId, setCurrentUserId] = useState(null);
   const [activePartnerId, setActivePartnerId] = useState(null);
   const [partnersDetails, setPartnersDetails] = useState({});
+  const [showModal, setShowModal] = useState(false);
   const messagesEndRef = useRef(null);
 
   const location = useLocation();
 
-  useEffect(() => {
-    if (location.pathname === "/chats") {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+  const toggleModal = () => {
+    setShowModal(!showModal);
+    //hello
+  };
+  // useEffect(() => {
+  //   if (location.pathname === "/chats") {
+  //     document.body.style.overflow = "hidden";
+  //   } else {
+  //     document.body.style.overflow = "auto";
+  //   }
 
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [location.pathname]);
+  //   return () => {
+  //     document.body.style.overflow = "auto";
+  //   };
+  // }, [location.pathname]);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -251,6 +258,7 @@ function Chatroom() {
   }, []);
 
   return (
+    <>
     <div className="Chats-container">
       <div className="Chats-sidebar-container">
         <div className="Chats-sidebar-header">Chats</div>
@@ -299,7 +307,14 @@ function Chatroom() {
           <button className="Chats-console-send-button">Send</button>
         </form>
       </div>
+
     </div>
+    <div className="APIModal-container">
+      <APIModal email={currentUser.email} />
+    </div>
+
+    
+    </>
   );
 }
 
