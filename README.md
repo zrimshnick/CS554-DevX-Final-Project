@@ -1,5 +1,5 @@
-***LOCAL INSTRUCTIONS:***
-IMPORTANT: To run locally, you MUST remove VITE_HEROKU_SERVER and VITE_HEROKU_SERVERCHAT from the .env
+***LOCAL INSTRUCTIONS:*** <br><br>
+IMPORTANT: To run locally, you MUST remove VITE_HEROKU_SERVER and VITE_HEROKU_SERVERCHAT from the .env located in the DevX-Project subdirectory <br><br>
 ---------------------------------
 **TO RUN MAIN SERVER:**
 - from main directory "CS554-DevX-Final-Project":
@@ -29,9 +29,9 @@ starts webpage on localhost:5173
 
 --------------------------------
 
-HOSTED INSTRUCTIONS:
+***HOSTED INSTRUCTIONS:*** <br> <br>
 
-Use our app on https://cs-554-dev-x-final-project.vercel.app/
-React frontend hosted with Vercel at https://cs-554-dev-x-final-project.vercel.app/
-Node.js backend hosted with Heroku at https://fierce-citadel-77900-969c3a8f8223.herokuapp.com/
-Socket.io server hosted with Heroku at https://secret-ocean-18840-8755a33ecbaf.herokuapp.com/
+Use our app on https://cs-554-dev-x-final-project.vercel.app/ <br>
+React frontend hosted with Vercel at https://cs-554-dev-x-final-project.vercel.app/ <br>
+Node.js backend hosted with Heroku at https://fierce-citadel-77900-969c3a8f8223.herokuapp.com/ <br>
+Socket.io server hosted with Heroku at https://secret-ocean-18840-8755a33ecbaf.herokuapp.com/ <br>
