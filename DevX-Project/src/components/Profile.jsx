@@ -72,7 +72,7 @@ const Profile = () => {
 
       console.log(formData)
   
-      const response = await fetch(`${import.meta.env.HEROKU_SERVER || API_LOCAL}/user/`, {
+      const response = await fetch(`${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/`, {
         method: "PATCH",
         body: formData,
       });
