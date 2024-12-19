@@ -12,7 +12,7 @@ function Home(props) {
   const [openProfileModal, setOpenProfileModal] = useState(false);
   const [rerender, setReRender] = useState(false);
   const videoUrl = 'https://devx2024.s3.amazonaws.com/CoffeeFinal.mp4';
-  const API_LOCAL = "https://localhost:3000"
+  const API_LOCAL = "http://localhost:3000"
 
 
   useEffect(() => {

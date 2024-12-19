@@ -7,8 +7,8 @@ import * as validation from "../validation.js";
 import multer from 'multer'
 import { users } from "../config/mongoCollections.js";
 const upload = multer({ storage: multer.memoryStorage() });
-const APP_LOCAL = "https://localhost:3000"
-const APP_HOSTED = "https://fierce-citadel-77900-969c3a8f8223.herokuapp.com"
+const APP_LOCAL = "http://localhost:3000"
+const APP_HOSTED = "http://fierce-citadel-77900-969c3a8f8223.herokuapp.com"
 
 router
   .route("/")

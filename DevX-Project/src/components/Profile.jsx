@@ -16,7 +16,7 @@ import axios from "axios";
 import "./Profile.css";
 import SignOutButton from "./SignOut";
 import {ProfileForm} from "./CompleteProfile";
-const API_LOCAL = "https://localhost:3000"
+const API_LOCAL = "http://localhost:3000"
 
 const Profile = () => {
   const { currentUser } = useContext(AuthContext);

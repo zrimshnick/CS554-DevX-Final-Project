@@ -4,7 +4,7 @@ import "./Explore.css";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import TinderCard from "react-tinder-card";
-const API_LOCAL = "https://localhost:3000"
+const API_LOCAL = "http://localhost:3000"
 
 function Explore() {
   const { currentUser } = useContext(AuthContext);

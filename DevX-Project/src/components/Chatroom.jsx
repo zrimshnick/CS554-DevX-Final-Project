@@ -7,8 +7,8 @@ import { useLocation } from "react-router-dom";
 import Chat from "./Chat";
 import APIModal from "./APIModal";
 import Button from '@mui/material/Button';
-const API_LOCAL = "https://localhost:3000"
-const API_LOCAL_CHAT = "https://localhost:4000"
+const API_LOCAL = "http://localhost:3000"
+const API_LOCAL_CHAT = "http://localhost:4000"
 
 function Chatroom() {
   const { currentUser } = useContext(AuthContext);

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Grid, Avatar, Typography, Paper, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-const API_LOCAL = "https://localhost:3000/"
+const API_LOCAL = "http://localhost:3000"
 
 
 const FriendsList = () => {

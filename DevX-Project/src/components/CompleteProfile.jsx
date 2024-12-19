@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import "../App.css";
 import axios from 'axios';
 import DOMPurify from 'dompurify'
-const API_LOCAL = "https://localhost:3000"
+const API_LOCAL = "http://localhost:3000"
 
 const checkProfileCompletion = (user) => {
   return (user.age != 0 &&
