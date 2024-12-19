@@ -8,6 +8,7 @@ import Chat from "./Chat";
 import APIModal from "./APIModal";
 import Button from '@mui/material/Button';
 const API_LOCAL = "https://localhost:3000"
+const API_LOCAL_CHAT = "https://localhost:4000"
 
 function Chatroom() {
   const { currentUser } = useContext(AuthContext);
@@ -53,7 +54,7 @@ function Chatroom() {
   const socketRef = useRef();
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:4000");
+    socketRef.current = io(`${import.meta.env.VITE_HEROKU_SERVERCHAT || API_LOCAL_CHAT}`);
     return () => {
       socketRef.current.disconnect();
     };

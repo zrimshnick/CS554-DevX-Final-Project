@@ -9,7 +9,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
       origin: (origin, callback) => {
-        const allowedOrigins = [
+        const allowedOrigins = [ 
           "http://localhost:5173",
           "https://cs-554-dev-x-final-project.vercel.app",
         ];
@@ -94,7 +94,7 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(4000, () => {
+httpServer.listen(process.env.PORT || 4000, () => {
   console.log("Server is running on http://localhost:4000");
 });
 /* }); */
