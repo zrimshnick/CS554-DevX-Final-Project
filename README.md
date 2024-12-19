@@ -1,5 +1,6 @@
 ***LOCAL INSTRUCTIONS:*** <br><br>
 IMPORTANT: To run locally, you MUST remove VITE_HEROKU_SERVER and VITE_HEROKU_SERVERCHAT from the .env located in the DevX-Project subdirectory <br><br>
+SEED FILE: Our MongoDB database is hosted on the cloud, so it is already populated for you. Use an address with 07030 zip code to see our seeded data. <br><br>
 ---------------------------------
 **TO RUN MAIN SERVER:**
 - from main directory "CS554-DevX-Final-Project":
