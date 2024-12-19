@@ -12,6 +12,7 @@ import {
   reauthenticateWithCredential,
 } from "firebase/auth";
 /* import { generateUsername } from "unique-username-generator"; */
+const API_LOCAL = "http://localhost:3000"
 
 async function doCreateUserWithEmailAndPassword(email, password) {
   const auth = getAuth();
@@ -53,7 +54,7 @@ async function doSocialSignIn() {
 
     // Create MongoDB user
     try {
-      const response = await fetch("http://localhost:3000/user/", {
+      const response = await fetch(`${import.meta.env.VITE_HEROKU_SERVER || API_LOCAL}/user/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
