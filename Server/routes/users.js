@@ -7,6 +7,8 @@ import * as validation from "../validation.js";
 import multer from 'multer'
 import { users } from "../config/mongoCollections.js";
 const upload = multer({ storage: multer.memoryStorage() });
+const APP_LOCAL = "https://localhost:3000"
+const APP_HOSTED = "https://fierce-citadel-77900-969c3a8f8223.herokuapp.com"
 
 router
   .route("/")
@@ -70,7 +72,7 @@ router
     if (profilePictureFile) {
       console.log("setting pfp");
       const presignedUrlResponse = await fetch(
-        `http://localhost:3000/generate-presigned-url?filename=${updatedData.email}&filetype=jpeg`
+        `${APP_HOSTED || APP_LOCAL}/generate-presigned-url?filename=${updatedData.email}&filetype=jpeg`
       );
       if (presignedUrlResponse.ok) {
         try {
