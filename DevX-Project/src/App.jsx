@@ -13,6 +13,7 @@ import Home from "./components/Home";
 import Profile from "./components/Profile";
 import Chatroom from "./components/Chatroom";
 import Explore from "./components/Explore";
+import Error from "./components/Error";
 import CompleteProfile from "./components/CompleteProfile";
 
 function App() {
@@ -42,6 +43,8 @@ function App() {
             <Route path="/explore" element={<PrivateRoute />}>
               <Route path="/explore" element={<Explore />}></Route>
             </Route>
+
+            <Route path="*" element={<Error />} />
           </Routes>
         </div>
       </div>
